@@ -21,31 +21,36 @@ const nextConfig = {
   output: 'export',
   basePath: basePath,
   assetPrefix: assetPrefix,
-  
-  images: {
-    remotePatterns: [
-      {
-        protocol: "https",
-        hostname: "i.pravatar.cc",
-      },
-      {
-        protocol: "https",
-        hostname: "images.unsplash.com",
-      },
-      {
-        protocol: "https",
-        hostname: "github.com",
-      },
-      {
-        protocol: "https",
-        hostname: "avatars.githubusercontent.com",
-      },
-      {
-        protocol: "https",
-        hostname: "media.licdn.com",
-      }
-    ],
-  },
+    // Configure images for static export
+    images: {
+      unoptimized: true,
+      domains: [
+        'localhost', 
+        'localhost:3000', 
+        'media.licdn.com', 
+        'onibiocare.com',
+        'oni-biocare.github.io'
+      ],
+      remotePatterns: [
+        {
+          protocol: 'https',
+          hostname: '**',
+        },
+        {
+          protocol: 'http',
+          hostname: '**',
+        },
+      ],
+    },
+    
+    // Metadata configuration for SEO
+    env: {
+      siteUrl: 'https://onibiocare.com',
+      siteName: 'Oni Biocare',
+      siteDescription: 'Sản phẩm chăm sóc sức khỏe chất lượng cao',
+      locale: 'vi_VN',
+      basePath: basePath, // Make basePath available in environment
+    },
 };
 
 export default nextConfig;

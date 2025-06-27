@@ -4,7 +4,7 @@ import fs from 'fs';
 import path from 'path';
 import Link from 'next/link';
 import { Metadata } from 'next';
-import Image from 'next/image';
+import OniImage from '@/components/ui/oni-image';
 import { Suspense } from 'react';
 import { PlaceholderImage } from '@/components/ui/placeholder-image';
 import { Breadcrumb } from '@/components/ui/breadcrumb';
@@ -166,7 +166,7 @@ export default async function BlogPost({ params }: PageProps) {
           <div className="w-full mb-10">
             <div className="relative w-full aspect-[16/9] rounded-2xl overflow-hidden">
               {post.coverImage ? (
-                <Image
+                <OniImage
                   src={post.coverImage}
                   alt={post.title}
                   fill

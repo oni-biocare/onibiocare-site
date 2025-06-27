@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import ModalVideo from "@/components/ui/modal-video";
 import { ArrowRight } from "lucide-react";
 import { useTheme } from "next-themes";
-import Image from "next/image";
+import OniImage from "@/components/ui/oni-image";
 import Link from "next/link";
 
 export const HeroSection = () => {
@@ -57,7 +57,7 @@ export const HeroSection = () => {
 
         <div className="relative group mt-14">
           <div className="absolute top-2 lg:-top-8 left-1/2 transform -translate-x-1/2 w-[90%] mx-auto h-24 lg:h-80 bg-primary/50 rounded-full blur-3xl"></div>
-          {/* <Image
+          {/* <OniImage
             width={1200}
             height={1200}
             className="w-full md:w-[1200px] mx-auto rounded-lg relative rouded-lg leading-none flex items-center border border-t-2 border-secondary  border-t-primary/30"

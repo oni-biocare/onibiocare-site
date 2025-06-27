@@ -1,7 +1,7 @@
 import { Separator } from "@/components/ui/separator";
 import { ChevronsDownIcon } from "lucide-react";
 import Link from "next/link";
-import Image from "next/image";
+import OniImage from "@/components/ui/oni-image";
 
 export const FooterSection = () => {
   return (
@@ -11,7 +11,7 @@ export const FooterSection = () => {
           <div className="col-span-full xl:col-span-2">
             <Link href="#" className="flex font-bold items-center">
               {/* <ChevronsDownIcon className="w-9 h-9 mr-2 bg-gradient-to-tr from-primary via-primary/70 to-primary rounded-lg border border-secondary" /> */}
-              <Image
+              <OniImage
                 className="border-secondary from-primary via-primary/70 to-primary rounded-lg w-9 h-9 mr-2 border text-white"
                 src="/onibiocare-logo.png"
                 width={48}

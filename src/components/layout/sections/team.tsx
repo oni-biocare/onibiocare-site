@@ -9,8 +9,9 @@ import {
   CardFooter,
 } from "@/components/ui/card";
 import { Facebook, FacebookIcon, YoutubeIcon } from "lucide-react";
-import Image from "next/image";
+import OniImage from "@/components/ui/oni-image";
 import Link from "next/link";
+
 interface TeamProps {
   imageUrl: string;
   firstName: string;
@@ -18,10 +19,12 @@ interface TeamProps {
   positions: string[];
   socialNetworks: SocialNetworkProps[];
 }
+
 interface SocialNetworkProps {
   name: string;
   url: string;
 }
+
 export const TeamSection = () => {
   const teamList: TeamProps[] = [
     {
@@ -133,7 +136,7 @@ export const TeamSection = () => {
             >
               <CardHeader className="p-0 gap-0">
                 <div className="h-full overflow-hidden">
-                  <Image
+                  <OniImage
                     src={imageUrl}
                     alt=""
                     width={300}

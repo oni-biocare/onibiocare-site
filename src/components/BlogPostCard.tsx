@@ -1,6 +1,6 @@
 import { format } from 'date-fns';
 import Link from 'next/link';
-import Image from 'next/image';
+import OniImage from '@/components/ui/oni-image';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { PlaceholderImage } from '@/components/ui/placeholder-image';
@@ -25,7 +25,7 @@ export function BlogPostCard({ post, categoryName }: BlogPostCardProps) {
           )}
           <div className="relative w-full h-full">
             {post.coverImage ? (
-              <Image
+              <OniImage
                 src={post.coverImage}
                 alt={post.title}
                 fill

@@ -2,7 +2,7 @@
 
 import { useState, useRef } from "react";
 import { Dialog, DialogBackdrop, DialogPanel } from "@headlessui/react";
-import Image from "next/image";
+import OniImage from "@/components/ui/oni-image";
 import SecondaryIllustration from "../../public/secondary-illustration.svg";
 
 interface ModalVideoProps {
@@ -34,7 +34,7 @@ export default function ModalVideo({
         className="pointer-events-none absolute bottom-8 left-1/2 -z-10 -ml-28 -translate-x-1/2 translate-y-1/2"
         aria-hidden="true"
       >
-        <Image
+        <OniImage
           className="md:max-w-none"
           src={"/secondary-illustration.svg"}
           width={1165}
@@ -54,7 +54,7 @@ export default function ModalVideo({
         data-aos-delay={200}
       >
         <figure className="relative overflow-hidden rounded-2xl before:absolute before:inset-0 before:-z-10 before:bg-gradient-to-br before:from-gray-900 before:via-indigo-500/20 before:to-gray-900">
-          <Image
+          <OniImage
             className=""
             src={thumb}
             width={thumbWidth}

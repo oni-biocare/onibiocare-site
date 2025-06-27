@@ -8,7 +8,7 @@ let basePath = '';
 
 if (isGithubActions) {
   // Extract repository name from GITHUB_REPOSITORY (format: owner/repo)
-  const repo = process.env.GITHUB_REPOSITORY?.replace(/.*?\//, '') || '';
+  const repo = "onibiocare-site";
   assetPrefix = `/${repo}/`;
   basePath = `/${repo}`;
 } else {

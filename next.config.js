@@ -13,7 +13,8 @@ const nextConfig = {
       'localhost', 
       'localhost:3000', 
       'media.licdn.com', 
-      'onibiocare.com'
+      'onibiocare.com',
+      'oni-biocare.github.io'
     ],
     remotePatterns: [
       {

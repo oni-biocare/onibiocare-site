@@ -19,8 +19,6 @@ if (isGithubActions) {
 
 const nextConfig = {
   output: 'export',
-  basePath: basePath,
-  assetPrefix: assetPrefix,
     // Configure images for static export
     images: {
       unoptimized: true,

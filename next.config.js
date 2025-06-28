@@ -20,8 +20,6 @@ if (isGithubActions) {
 
 const nextConfig = {
   output: 'export',
-  basePath: basePath,
-  assetPrefix: assetPrefix,
   
   // Ignore TypeScript errors during build
   typescript: {

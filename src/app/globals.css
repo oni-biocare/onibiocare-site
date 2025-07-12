@@ -228,3 +228,82 @@ html {
     @apply bg-background text-foreground;
   }
 }
+
+/* Table Styles for Markdown Content */
+.article-content table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.5rem 0;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  border-radius: 0.5rem;
+  overflow: hidden;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+}
+
+.article-content table thead {
+  background-color: hsl(var(--muted));
+}
+
+.article-content table thead th {
+  padding: 0.75rem 1rem;
+  text-align: left;
+  font-weight: 600;
+  color: hsl(var(--foreground));
+  border-bottom: 1px solid hsl(var(--border));
+  font-size: 0.875rem;
+}
+
+.article-content table tbody tr {
+  border-bottom: 1px solid hsl(var(--border));
+  transition: background-color 0.2s ease;
+}
+
+.article-content table tbody tr:last-child {
+  border-bottom: none;
+}
+
+.article-content table tbody tr:hover {
+  background-color: hsl(var(--muted) / 0.5);
+}
+
+.article-content table tbody td {
+  padding: 0.75rem 1rem;
+  color: hsl(var(--foreground));
+  vertical-align: top;
+}
+
+.article-content table tbody td:first-child {
+  font-weight: 500;
+}
+
+/* Responsive table */
+@media (max-width: 768px) {
+  .article-content table {
+    font-size: 0.75rem;
+  }
+  
+  .article-content table thead th,
+  .article-content table tbody td {
+    padding: 0.5rem 0.75rem;
+  }
+  
+  .article-content table {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+}
+
+/* Dark mode table adjustments */
+.dark .article-content table {
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.3), 0 1px 2px 0 rgba(0, 0, 0, 0.2);
+}
+
+.dark .article-content table thead {
+  background-color: hsl(var(--muted));
+}
+
+.dark .article-content table tbody tr:hover {
+  background-color: hsl(var(--muted) / 0.3);
+}

@@ -1,12 +1,10 @@
 ---
 title: "5 Cách Dầu Magne Oil Cải Thiện Thói Quen Đi Ngủ Của Bạn"
-description: "Khám phá cách sử dụng Dầu Magne Oil trong thói quen buổi tối có thể cải thiện đáng kể chất lượng giấc ngủ, giúp bạn có giấc ngủ sâu và phục hồi tốt hơn."
+excerpt: "Khám phá cách sử dụng Dầu Magne Oil trong thói quen buổi tối có thể cải thiện đáng kể chất lượng giấc ngủ, giúp bạn có giấc ngủ sâu và phục hồi tốt hơn."
 date: "2025-07-12"
-image: "/images/products/magne_oil_2.png"
-author: "Đội Ngũ Y Tế ONI BIOCARE"
-categories: ["Sức Khỏe", "Giấc Ngủ"]
-featured: true
-draft: false
+coverImage: "/images/products/magne_oil_2.png"
+author: "ONI Biocare Team"
+category: "Sức khoẻ"
 ---
 
 ## Giấc Ngủ Chất Lượng - Chìa Khóa Cho Sức Khỏe Toàn Diện

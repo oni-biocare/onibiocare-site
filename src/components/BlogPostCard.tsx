@@ -41,7 +41,7 @@ export function BlogPostCard({ post, categoryName }: BlogPostCardProps) {
             )}
           </div>
         </div>
-        <CardHeader className="pb-2">
+        <CardHeader className="pb-2 ">
           <h2 className="text-xl font-semibold line-clamp-2 hover:text-primary transition-colors">
             {post.title}
           </h2>

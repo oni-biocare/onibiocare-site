@@ -201,7 +201,7 @@ export default async function BlogPost({ params }: PageProps) {
               )}
               
               <div 
-                className="prose prose-lg max-w-none article-content"
+                className="prose prose-lg max-w-none prose-table:w-full prose-thead:bg-muted prose-th:p-3 prose-th:font-semibold prose-td:p-3 prose-tr:border-b prose-tr:border-border prose-tr:hover:bg-muted/50 article-content"
                 dangerouslySetInnerHTML={{ __html: post.content }}
               />
               

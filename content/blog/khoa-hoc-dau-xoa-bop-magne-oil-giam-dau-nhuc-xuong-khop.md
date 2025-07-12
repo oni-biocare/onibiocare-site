@@ -1,12 +1,10 @@
 ---
 title: "Khoa Học Đằng Sau Dầu Magne Oil: Cơ Chế Hấp Thụ Magiê Giúp Giảm Đau Hiệu Quả"
-description: "Khám phá cơ chế khoa học về cách magiê nguyên chất 100% trong Dầu Magne Oil thấm sâu vào khớp và cơ thông qua da, giúp giảm đau và cải thiện vận động hiệu quả."
+excerpt: "Khám phá cơ chế khoa học về cách magiê nguyên chất 100% trong Dầu Magne Oil thấm sâu vào khớp và cơ thông qua da, giúp giảm đau và cải thiện vận động hiệu quả."
 date: "2025-07-12"
-image: "/images/products/magne_oil_1.png"
-author: "Đội Ngũ Y Tế ONI BIOCARE"
-categories: ["Sức Khỏe", "Xương Khớp"]
-featured: true
-draft: false
+coverImage: "/images/products/magne_oil_1.png"
+author: "ONI Biocare Team"
+category: "Sức khoẻ"
 ---
 
 ## Magiê và Vai Trò Quan Trọng Trong Cơ Thể Con Người

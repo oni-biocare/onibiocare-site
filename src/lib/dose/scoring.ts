@@ -59,50 +59,49 @@ function sectionName(section: DoseSectionKey) {
 function traitForSection(section: DoseSectionKey) {
   switch (section) {
     case "dopamine":
-      return "momentum and drive";
+      return "động lực và sức mạnh thúc đẩy";
     case "oxytocin":
-      return "connection and emotional safety";
+      return "kết nối và an toàn cảm xúc";
     case "serotonin":
-      return "mood stability and calm confidence";
+      return "ổn định tâm trạng và tự tin bình thản";
     case "endorphins":
-      return "release and stress recovery";
+      return "giải toả và phục hồi sau căng thẳng";
   }
 }
 
 function copyForSection(section: DoseSectionKey, band: DoseBandLabel) {
-  // State summaries aligned to docs/dose-requirement.md
   switch (section) {
     case "dopamine": {
       switch (band) {
         case "Very Low":
           return {
-            state: "Your drive and reward feeling are under-supported right now.",
-            patterns: ["Hard to start", "Progress doesn’t feel rewarding"],
-            suggestions: ["Daily micro-goals", "Visible progress tracking"],
+            state: "Động lực và cảm giác phần thưởng của bạn đang không được nuôi dưỡng đủ lúc này.",
+            patterns: ["Khó bắt đầu", "Tiến bộ không cảm thấy xứng đáng"],
+            suggestions: ["Đặt mục tiêu nhỏ mỗi ngày", "Theo dõi tiến trình trực quan"],
           };
         case "Low":
           return {
-            state: "Your motivation is inconsistent—momentum comes and goes.",
-            patterns: ["Bursts of motivation", "Hard to sustain follow-through"],
-            suggestions: ["Plan tiny next steps", "Reward small wins"],
+            state: "Động lực của bạn không ổn định — năng lượng đến rồi lại đi.",
+            patterns: ["Động lực đến từng đợt", "Khó duy trì kiên trì"],
+            suggestions: ["Lên kế hoạch những bước nhỏ tiếp theo", "Tự thưởng cho những thành tích nhỏ"],
           };
         case "Moderate":
           return {
-            state: "You can make progress, especially with structure and routines.",
-            patterns: ["Functional baseline", "Needs planning to stay on track"],
-            suggestions: ["Time-block priorities", "Weekly goal review"],
+            state: "Bạn có thể tiến bộ, đặc biệt khi có cấu trúc và thói quen rõ ràng.",
+            patterns: ["Nền tảng hoạt động ổn", "Cần lên kế hoạch để đi đúng hướng"],
+            suggestions: ["Phân bổ thời gian cho ưu tiên", "Ôn lại mục tiêu hàng tuần"],
           };
         case "High":
           return {
-            state: "You’re self-driven—goals energize you and support follow-through.",
-            patterns: ["Good follow-through", "Motivated by progress"],
-            suggestions: ["Protect focus time", "Avoid overcommitting"],
+            state: "Bạn tự thúc đẩy bản thân — mục tiêu tiếp thêm năng lượng và giúp bạn kiên trì.",
+            patterns: ["Kiên trì tốt", "Được thúc đẩy bởi tiến bộ"],
+            suggestions: ["Bảo vệ thời gian tập trung", "Tránh nhận quá nhiều việc"],
           };
         case "Very High":
           return {
-            state: "You’re highly goal-charged—drive is a strong personal asset.",
-            patterns: ["Very strong momentum", "High reward sensitivity"],
-            suggestions: ["Watch burnout", "Schedule deliberate rest"],
+            state: "Bạn rất giàu năng lượng về mục tiêu — động lực là tài sản cá nhân mạnh mẽ.",
+            patterns: ["Động lực rất mạnh", "Nhạy cảm cao với phần thưởng"],
+            suggestions: ["Chú ý nguy cơ kiệt sức", "Lên lịch nghỉ ngơi có chủ đích"],
           };
       }
     }
@@ -110,33 +109,33 @@ function copyForSection(section: DoseSectionKey, band: DoseBandLabel) {
       switch (band) {
         case "Very Low":
           return {
-            state: "Connection and emotional safety feel under-supported right now.",
-            patterns: ["Loneliness or disconnection", "Social time doesn’t soothe"],
-            suggestions: ["Reach out to one safe person", "Low-pressure connection"],
+            state: "Kết nối và an toàn cảm xúc đang không được nuôi dưỡng đủ lúc này.",
+            patterns: ["Cô đơn hoặc xa cách", "Thời gian giao lưu không giúp xoa dịu"],
+            suggestions: ["Liên hệ với một người bạn tin tưởng", "Kết nối nhẹ nhàng, không áp lực"],
           };
         case "Low":
           return {
-            state: "You have some connections, but they may not feel deeply nourishing.",
-            patterns: ["Thin support", "Difficulty receiving help"],
-            suggestions: ["Ask for one small support", "Create regular check-ins"],
+            state: "Bạn có một số kết nối, nhưng chúng có thể chưa đủ sâu sắc để nuôi dưỡng bạn.",
+            patterns: ["Hỗ trợ mỏng manh", "Khó nhận sự giúp đỡ"],
+            suggestions: ["Nhờ một sự hỗ trợ nhỏ", "Tạo thói quen kiểm tra định kỳ với nhau"],
           };
         case "Moderate":
           return {
-            state: "You have at least one anchor connection that helps sometimes.",
-            patterns: ["Some emotional safety", "Support is inconsistent"],
-            suggestions: ["Strengthen one bond", "More shared time"],
+            state: "Bạn có ít nhất một kết nối vững chắc đôi khi có thể giúp đỡ bạn.",
+            patterns: ["Có chút an toàn cảm xúc", "Hỗ trợ không ổn định"],
+            suggestions: ["Củng cố một mối quan hệ", "Dành nhiều thời gian cùng nhau hơn"],
           };
         case "High":
           return {
-            state: "You feel well-supported—trust and belonging are strong.",
-            patterns: ["Emotionally safe bonds", "Social time calms you"],
-            suggestions: ["Protect boundaries", "Keep nurturing key relationships"],
+            state: "Bạn cảm thấy được hỗ trợ tốt — niềm tin và sự thuộc về đều mạnh mẽ.",
+            patterns: ["Các mối quan hệ an toàn về cảm xúc", "Thời gian giao lưu giúp bạn bình tâm"],
+            suggestions: ["Bảo vệ ranh giới cá nhân", "Tiếp tục vun đắp các mối quan hệ quan trọng"],
           };
         case "Very High":
           return {
-            state: "You’re deeply bonded—connection is a consistent strength.",
-            patterns: ["Rich closeness", "Strong support network"],
-            suggestions: ["Avoid overgiving", "Maintain healthy boundaries"],
+            state: "Bạn có sự kết nối sâu sắc — mối quan hệ là điểm mạnh nhất quán của bạn.",
+            patterns: ["Sự gần gũi phong phú", "Mạng lưới hỗ trợ vững chắc"],
+            suggestions: ["Tránh cho đi quá mức", "Duy trì ranh giới lành mạnh"],
           };
       }
     }
@@ -144,33 +143,33 @@ function copyForSection(section: DoseSectionKey, band: DoseBandLabel) {
       switch (band) {
         case "Very Low":
           return {
-            state: "Mood stability feels heavy—negative spirals may be common.",
-            patterns: ["Low confidence", "Hard to self-soothe"],
-            suggestions: ["Simple calming routine", "Seek support if needed"],
+            state: "Sự ổn định tâm trạng cảm thấy nặng nề — những vòng xoáy tiêu cực có thể thường xuyên xảy ra.",
+            patterns: ["Tự tin thấp", "Khó tự xoa dịu bản thân"],
+            suggestions: ["Thói quen xoa dịu đơn giản", "Tìm kiếm hỗ trợ nếu cần"],
           };
         case "Low":
           return {
-            state: "Your balance is fragile—mood depends heavily on circumstances.",
-            patterns: ["Stress-sensitive mood", "Confidence fluctuates"],
-            suggestions: ["Daily grounding habit", "Reduce rumination triggers"],
+            state: "Sự cân bằng của bạn mong manh — tâm trạng phụ thuộc nhiều vào hoàn cảnh.",
+            patterns: ["Tâm trạng nhạy cảm với căng thẳng", "Sự tự tin không ổn định"],
+            suggestions: ["Thói quen bình ổn hàng ngày", "Giảm các tác nhân gây suy nghĩ lặp lại"],
           };
         case "Moderate":
           return {
-            state: "You’re generally okay; recovery after stress takes some effort.",
-            patterns: ["Stable enough", "Needs intentional reset"],
-            suggestions: ["Sleep and light exposure", "Consistent routines"],
+            state: "Bạn nhìn chung ổn; việc phục hồi sau căng thẳng cần một chút nỗ lực.",
+            patterns: ["Khá ổn định", "Cần làm mới một cách có chủ đích"],
+            suggestions: ["Ngủ đủ giấc và tiếp xúc ánh sáng", "Duy trì thói quen nhất quán"],
           };
         case "High":
           return {
-            state: "You’re calm and confident—your baseline mood is steady.",
-            patterns: ["Resilient mindset", "Good self-regulation"],
-            suggestions: ["Keep what works", "Support others without draining"],
+            state: "Bạn bình tĩnh và tự tin — tâm trạng nền tảng của bạn ổn định.",
+            patterns: ["Tư duy kiên cường", "Tự điều tiết tốt"],
+            suggestions: ["Giữ những gì đang hiệu quả", "Hỗ trợ người khác mà không cạn kiệt bản thân"],
           };
         case "Very High":
           return {
-            state: "You’re very grounded—inner stability is a consistent asset.",
-            patterns: ["Strong steadiness", "Quick recovery"],
-            suggestions: ["Maintain your routines", "Don’t neglect rest"],
+            state: "Bạn rất vững vàng — sự ổn định nội tâm là tài sản nhất quán của bạn.",
+            patterns: ["Sự vững chắc mạnh mẽ", "Phục hồi nhanh"],
+            suggestions: ["Duy trì thói quen của bạn", "Đừng bỏ bê việc nghỉ ngơi"],
           };
       }
     }
@@ -178,33 +177,33 @@ function copyForSection(section: DoseSectionKey, band: DoseBandLabel) {
       switch (band) {
         case "Very Low":
           return {
-            state: "Stress may stick in your body—relief and release feel limited.",
-            patterns: ["Tension persists", "Hard to reset"],
-            suggestions: ["Gentle movement", "Add laughter/lightness"],
+            state: "Căng thẳng có thể tích tụ trong cơ thể — sự giải toả và giảm nhẹ cảm thấy hạn chế.",
+            patterns: ["Căng thẳng kéo dài", "Khó làm mới bản thân"],
+            suggestions: ["Vận động nhẹ nhàng", "Thêm tiếng cười và sự nhẹ nhõm"],
           };
         case "Low":
           return {
-            state: "You can find relief sometimes, but it isn’t consistent yet.",
-            patterns: ["Limited reset tools", "Stress relief inconsistent"],
-            suggestions: ["Pick one reset habit", "Short walks or stretching"],
+            state: "Đôi khi bạn có thể tìm thấy sự giải toả, nhưng chưa ổn định.",
+            patterns: ["Ít công cụ làm mới", "Giải toả căng thẳng không ổn định"],
+            suggestions: ["Chọn một thói quen làm mới", "Đi bộ ngắn hoặc giãn cơ"],
           };
         case "Moderate":
           return {
-            state: "You can recover with intention—release isn’t fully automatic.",
-            patterns: ["Some recovery capacity", "Needs deliberate outlet"],
-            suggestions: ["Schedule movement", "Build a reset ritual"],
+            state: "Bạn có thể phục hồi với sự cố ý — sự giải toả chưa hoàn toàn tự động.",
+            patterns: ["Có khả năng phục hồi nhất định", "Cần lối thoát có chủ đích"],
+            suggestions: ["Lên lịch vận động", "Xây dựng nghi thức làm mới bản thân"],
           };
         case "High":
           return {
-            state: "You have a good stress buffer—release and joy happen regularly.",
-            patterns: ["Regular relief", "Healthy reset outlets"],
-            suggestions: ["Keep consistent outlets", "Balance intensity"],
+            state: "Bạn có bộ đệm tốt cho căng thẳng — sự giải toả và niềm vui diễn ra đều đặn.",
+            patterns: ["Giải toả đều đặn", "Lối thoát làm mới lành mạnh"],
+            suggestions: ["Duy trì các lối thoát ổn định", "Cân bằng cường độ"],
           };
         case "Very High":
           return {
-            state: "You’re resilient and light—recovery is a consistent strength.",
-            patterns: ["Strong release response", "High resilience"],
-            suggestions: ["Avoid intensity-as-coping", "Maintain variety"],
+            state: "Bạn kiên cường và nhẹ nhõm — khả năng phục hồi là điểm mạnh nhất quán.",
+            patterns: ["Phản ứng giải toả mạnh", "Khả năng phục hồi cao"],
+            suggestions: ["Tránh dùng cường độ cao làm cách đối phó", "Duy trì sự đa dạng"],
           };
       }
     }
@@ -223,7 +222,7 @@ export function computeDoseScores(answers: DoseAnswers): DoseScoresBySection {
       raw,
       band,
       state: copy.state,
-      patterns: copy.patterns,
+      patterns: copy.patterns as [string, string],
       suggestions: copy.suggestions,
     } satisfies DoseScore;
   }
@@ -257,10 +256,10 @@ export function balanceInsight(
   const priorityTrait = traitForSection(priority);
 
   if (pillar === priority) {
-    return `Your profile is fairly balanced across the four areas. Keep supporting your routines for ${pillarTrait}.`;
+    return `Hồ sơ của bạn khá cân bằng trên cả bốn lĩnh vực. Hãy tiếp tục duy trì thói quen để củng cố ${pillarTrait}.`;
   }
 
-  return `You’re stronger in ${pillarName} (${pillarTrait}), but lower in ${priorityName} (${priorityTrait}). Focus on small routines that build ${priorityTrait} while protecting your ${pillarTrait}.`;
+  return `Bạn mạnh hơn ở ${pillarName} (${pillarTrait}), nhưng thấp hơn ở ${priorityName} (${priorityTrait}). Hãy tập trung vào những thói quen nhỏ để phát triển ${priorityTrait} trong khi bảo vệ ${pillarTrait} của bạn.`;
 }
 
 export function computeDoseResults(answers: DoseAnswers): DoseResults {

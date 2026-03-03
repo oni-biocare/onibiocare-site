@@ -1,8 +1,5 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { Label } from "@/components/ui/label";
 import { DOSE_SECTIONS, getDoseQuestionsForSection } from "@/lib/dose/questions";
 import { DOSE_SECTION_ORDER } from "@/lib/dose/constants";
 import { DOSE_THEMES } from "@/lib/dose/theme";
@@ -15,12 +12,12 @@ import Lottie from "lottie-react";
 import { getDoseInterstitialAnimation } from "@/lib/dose/interstitialAnimations";
 import { notFound, useRouter } from "next/navigation";
 
-const SCALE: Array<{ value: LikertValue; label: string }> = [
-  { value: 1, label: "Never" },
-  { value: 2, label: "Rarely" },
-  { value: 3, label: "Sometimes" },
-  { value: 4, label: "Often" },
-  { value: 5, label: "Almost always" },
+const SCALE: Array<{ value: LikertValue; label: string; emoji: string }> = [
+  { value: 1, label: "Không bao giờ", emoji: "😶" },
+  { value: 2, label: "Hiếm khi", emoji: "😕" },
+  { value: 3, label: "Đôi khi", emoji: "😐" },
+  { value: 4, label: "Thường xuyên", emoji: "🙂" },
+  { value: 5, label: "Hầu như luôn luôn", emoji: "🌟" },
 ];
 
 function isSectionKey(value: string): value is DoseSectionKey {
@@ -32,24 +29,25 @@ function isSectionKey(value: string): value is DoseSectionKey {
   );
 }
 
+function sectionLabel(section: DoseSectionKey) {
+  const found = DOSE_SECTIONS.find((s) => s.key === section);
+  return found?.title ?? section;
+}
+
 function helperLine(section: DoseSectionKey) {
   switch (section) {
-    case "dopamine":
-      return "Think about momentum, focus, and follow-through.";
-    case "oxytocin":
-      return "Think about closeness, trust, and emotional safety.";
-    case "serotonin":
-      return "Think about steadiness, confidence, and calm recovery.";
-    case "endorphins":
-      return "Think about release, reset, and stress relief.";
+    case "dopamine": return "Hãy nghĩ về động lực, sự tập trung và khả năng kiên trì.";
+    case "oxytocin": return "Hãy nghĩ về sự gần gũi, tin tưởng và an toàn cảm xúc.";
+    case "serotonin": return "Hãy nghĩ về sự ổn định, tự tin và khả năng bình phục bình thản.";
+    case "endorphins": return "Hãy nghĩ về sự giải toả, làm mới và giảm căng thẳng.";
   }
 }
 
 function encouragement(qIndex: number) {
-  if (qIndex <= 1) return "Let’s start strong.";
-  if (qIndex <= 3) return "Nice—keep going.";
-  if (qIndex <= 5) return "You’re on a roll.";
-  return "Final one in this section.";
+  if (qIndex <= 1) return "Bắt đầu thật tốt nào.";
+  if (qIndex <= 3) return "Tốt lắm — tiếp tục thôi.";
+  if (qIndex <= 5) return "Bạn đang rất tốt đấy.";
+  return "Câu cuối của phần này.";
 }
 
 export default function DoseQuestionClient({
@@ -103,18 +101,16 @@ export default function DoseQuestionClient({
   }, [qIndex, sectionKey]);
 
   const nextLabel = useMemo(() => {
-    if (qIndex < 6) return "Next";
+    if (qIndex < 6) return "Tiếp →";
     const sectionPos = DOSE_SECTION_ORDER.indexOf(sectionKey);
     if (sectionPos < DOSE_SECTION_ORDER.length - 1) {
       const nextSection = DOSE_SECTIONS.find(
         (s) => s.key === DOSE_SECTION_ORDER[sectionPos + 1],
       );
-      return `Continue to ${nextSection?.title ?? "Next"}`;
+      return `${nextSection?.title ?? "Tiếp"} →`;
     }
-    return "See results";
+    return "Xem Kết Quả →";
   }, [qIndex, sectionKey]);
-
-  const progressPct = useMemo(() => (qIndex / 6) * 100, [qIndex]);
 
   const [showInterstitial, setShowInterstitial] = useState(false);
 
@@ -124,7 +120,6 @@ export default function DoseQuestionClient({
 
   const onNext = () => {
     if (selected === undefined) return;
-
     if (qIndex === 6) {
       setShowInterstitial(true);
       if (typeof window !== "undefined" && "vibrate" in navigator) {
@@ -133,183 +128,257 @@ export default function DoseQuestionClient({
       window.setTimeout(() => router.push(nextHref), 900);
       return;
     }
-
     router.push(nextHref);
   };
 
+  /* ─── Interstitial ─────────────────────────────────────── */
   if (showInterstitial) {
-    const animationData = getDoseInterstitialAnimation(sectionKey);
+    const sectionPos = DOSE_SECTION_ORDER.indexOf(sectionKey);
+    const isLastSection = sectionPos === DOSE_SECTION_ORDER.length - 1;
+
+    // Use NEXT section's identity for the animation preview
+    const nextSectionKey = !isLastSection
+      ? DOSE_SECTION_ORDER[sectionPos + 1]
+      : null;
+    const nextTheme = nextSectionKey ? DOSE_THEMES[nextSectionKey] : null;
+    const nextSectionMeta = nextSectionKey
+      ? DOSE_SECTIONS.find((s) => s.key === nextSectionKey)
+      : null;
+    const animationData = nextSectionKey
+      ? getDoseInterstitialAnimation(nextSectionKey)
+      : getDoseInterstitialAnimation(sectionKey);
+
+    const displayAccent = nextTheme?.accentHex ?? theme.accentHex;
 
     return (
-      <main className="relative flex min-h-screen items-center justify-center overflow-hidden p-6">
+      <main
+        className="flex min-h-screen items-center justify-center p-6"
+        style={{ background: "#0F0F14" }}
+      >
         <div
-          className={cn(
-            "pointer-events-none absolute inset-0 opacity-30",
-            "bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.35),transparent_60%)]",
-          )}
-        />
-        <div className={cn("absolute inset-0 -z-10 ")} />
-
-        <div
-          className={cn(
-            "relative w-full max-w-md overflow-hidden rounded-3xl",
-            "border border-white/20 bg-white/70 shadow-xl backdrop-blur-xl",
-            "dark:border-white/10 dark:bg-black/30",
-          )}
+          className="w-full max-w-sm rounded-2xl p-8 text-center"
+          style={{ background: "#1C1C26" }}
         >
-          <div className={cn("absolute inset-0")} />
+          {/* Animation icon — themed to the NEXT section */}
+          <div
+            className="mx-auto mb-5 flex h-24 w-24 items-center justify-center rounded-xl"
+            style={{ background: displayAccent + "22" }}
+          >
+            {isLastSection ? (
+              /* Final section: star completion icon */
+              <span className="text-5xl">🌟</span>
+            ) : (
+              <Lottie
+                animationData={animationData}
+                loop
+                autoplay
+                className="h-16 w-16"
+              />
+            )}
+          </div>
 
-          <div className="relative p-6 sm:p-7 text-center">
-            <div
-              className={cn(
-                "mx-auto mb-5 grid h-28 w-28 place-items-center rounded-2xl",
-                "bg-white/60 ring-1 ring-black/5",
-                "shadow-sm",
-                "dark:bg-white/10 dark:ring-white/10",
-                "animate-in fade-in zoom-in-95 duration-300",
-              )}
-              aria-hidden="true"
-            >
-              <Lottie animationData={animationData} loop autoplay className="h-20 w-20" />
-            </div>
+          {/* "Section complete" label */}
+          <div
+            className="mb-1 text-xs font-semibold uppercase tracking-widest"
+            style={{ color: theme.accentHex }}
+          >
+            {sectionMeta.title} · Xong ✓
+          </div>
 
-            <div className={cn("animate-in fade-in slide-in-from-bottom-2 duration-300", "text-xs font-semibold tracking-wide text-slate-700/80", "dark:text-white/70")}>
-              You’re done with this section
-            </div>
-
-            <div
-              className={cn(
-                "animate-in fade-in slide-in-from-bottom-2 duration-300 delay-75",
-                "mt-2 text-2xl font-semibold tracking-tight",
-                "text-slate-900 dark:text-white", theme.accentText,
-              )}
-            >
-              {sectionMeta.title}
-            </div>
-
-            <div
-              className={cn(
-                "animate-in fade-in slide-in-from-bottom-2 duration-300 delay-100",
-                "mt-2 text-sm text-slate-700/90 dark:text-white/80",
-              )}
-            >
-              Saving your answers and taking you to what’s next.
-            </div>
-
-            <div className="mt-6">
-              <div className={cn("mx-auto h-1.5 w-40 overflow-hidden rounded-full", "bg-black/10 dark:bg-white/15")}>
-                <div className={cn("h-full w-full", "animate-[dose-indeterminate_900ms_ease-in-out_infinite]", "bg-black/30 dark:bg-white/40")} />
+          {/* Next section teaser OR results CTA */}
+          {isLastSection ? (
+            <>
+              <div
+                className="text-2xl font-bold text-white"
+                style={{ fontFamily: "var(--font-dose-grotesk, inherit)" }}
+              >
+                Bạn đã hoàn thành!
               </div>
-              <style jsx>{`
-                @keyframes dose-indeterminate {
-                  0% {
-                    transform: translateX(-60%);
-                  }
-                  50% {
-                    transform: translateX(0%);
-                  }
-                  100% {
-                    transform: translateX(60%);
-                  }
-                }
-              `}</style>
-            </div>
+              <div className="mt-2 text-sm text-slate-400">
+                Đang tổng hợp hồ sơ D.O.S.E của bạn…
+              </div>
+            </>
+          ) : (
+            <>
+              <div className="mb-0.5 text-xs text-slate-500">Tiếp theo</div>
+              <div
+                className="text-2xl font-bold"
+                style={{
+                  fontFamily: "var(--font-dose-grotesk, inherit)",
+                  color: displayAccent,
+                }}
+              >
+                {nextSectionMeta?.title}
+              </div>
+              <div className="mt-1 text-sm text-slate-400">
+                {nextSectionMeta?.subtitle}
+              </div>
+            </>
+          )}
+
+          {/* Segmented section progress bar */}
+          <div className="mt-6 flex gap-1 justify-center">
+            {DOSE_SECTION_ORDER.map((k, i) => {
+              const done = i <= sectionPos;
+              const isNext = i === sectionPos + 1;
+              return (
+                <div
+                  key={k}
+                  className="h-1.5 flex-1 rounded-full transition-colors duration-500"
+                  style={{
+                    background: done
+                      ? theme.accentHex
+                      : isNext
+                        ? displayAccent + "55"
+                        : "#2A2A38",
+                  }}
+                />
+              );
+            })}
           </div>
         </div>
       </main>
     );
   }
 
+
+  /* ─── Question screen ───────────────────────────────────── */
   return (
-    <main className="relative min-h-screen overflow-hidden">
+    <main
+      className="flex min-h-screen flex-col"
+      style={{ background: "#0F0F14" }}
+    >
+      {/* ── Sticky top bar ────────────────────────────────── */}
       <div
-        className={cn(
-          "pointer-events-none absolute inset-0 -z-10 opacity-30",
-          "bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.25),transparent_55%)]",
-        )}
-      />
+        className="sticky top-0 z-10 border-b px-4 py-3"
+        style={{ background: "#0F0F14", borderColor: "#2A2A38" }}
+      >
+        <div className="mx-auto flex max-w-2xl items-center justify-between gap-4">
+          <span
+            className="rounded-md px-2.5 py-1 text-[11px] font-bold uppercase tracking-widest"
+            style={{
+              background: theme.accentHex + "22",
+              color: theme.accentHex,
+            }}
+          >
+            {sectionLabel(sectionKey)}
+          </span>
 
-      <div className="container mx-auto flex min-h-screen max-w-2xl flex-col p-4">
-        <div className="ml-1 mt-4 mb-2 text-lg font-semibold leading-snug sm:text-xl text-heading">{qIndex} / 6</div>
+          <span
+            className="text-xs text-slate-500"
+            style={{ fontFamily: "var(--font-dose-mono, monospace)" }}
+          >
+            Câu {qIndex} / 6
+          </span>
+        </div>
+      </div>
 
-        <Card>
-          <div className="h-1 w-full overflow-hidden rounded-lg bg-muted">
+      {/* ── Segmented progress bar ────────────────────────── */}
+      <div className="px-4 pt-3">
+        <div className="mx-auto flex max-w-2xl gap-1">
+          {Array.from({ length: 6 }, (_, i) => (
             <div
-              className={cn(
-                "h-1 transition-all overflow-hidden duration-500 ease-out bg-primary rounded-lg",
-              )}
-              style={{ width: `${progressPct}%` }}
+              key={i}
+              className="h-1 flex-1 rounded-full transition-colors duration-300"
+              style={{ background: i < qIndex ? theme.accentHex : "#2A2A38" }}
             />
-          </div>
-          <div className="p-4 sm:p-6">
+          ))}
+        </div>
+      </div>
 
-            <div className="space-y-6">
+      {/* ── Main content ──────────────────────────────────── */}
+      <div className="flex flex-1 flex-col items-center p-4 pb-0">
+        <div className="w-full max-w-2xl space-y-6 pt-4">
+          <p className="text-xs italic text-slate-500">{helperLine(sectionKey)}</p>
 
-              <div className="space-y-2">
-                <div className="text-lg font-semibold leading-snug sm:text-xl">
-                  {question.prompt}
-                </div>
-              </div>
+          <span
+            className="inline-block rounded-md px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wide"
+            style={{ background: "#2A2A38", color: "#94A3B8" }}
+          >
+            {encouragement(qIndex)}
+          </span>
 
-              <div className="space-y-3">
-                {SCALE.map((opt) => {
-                  const isSelected = selected === opt.value;
-                  return (
-                    <button
-                      key={opt.value}
-                      type="button"
-                      onClick={() => {
-                        setAnswer(question.id, opt.value);
-                        if (typeof window !== "undefined" && "vibrate" in navigator) {
-                          navigator.vibrate(10);
-                        }
-                      }}
-                      className={cn(
-                        "w-full rounded-md border p-4 text-left",
-                        "transition-all duration-200 ease-out",
-                        "active:scale-[0.99]",
-                        "hover:scale-[1.005]",
-                        "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
-                        isSelected
-                          ? cn(
-                            "border-transparent ring-2",
-                            theme.accentRing,
-                            theme.accentBg,
-                          )
-                          : "",
-                      )}
-                    >
-                      <div className="flex items-center justify-between gap-3">
-                        <Label className="text-base font-medium">
-                          {opt.value}. {opt.label}
-                        </Label>
+          <h2
+            className="text-xl font-bold leading-snug text-white sm:text-2xl"
+            style={{ fontFamily: "var(--font-dose-grotesk, inherit)" }}
+          >
+            {question.prompt}
+          </h2>
 
-                      </div>
-                    </button>
-                  );
-                })}
-              </div>
-
-              <div className="flex items-center justify-between gap-3 pt-2">
-                <Button variant="outline" asChild className="w-28">
-                  <Link href={prevHref}>Back</Link>
-                </Button>
-
-                <Button
+          {/* Answer options */}
+          <div className="space-y-2.5">
+            {SCALE.map((opt) => {
+              const isSelected = selected === opt.value;
+              return (
+                <button
+                  key={opt.value}
+                  type="button"
+                  onClick={() => {
+                    setAnswer(question.id, opt.value);
+                    if (typeof window !== "undefined" && "vibrate" in navigator) {
+                      navigator.vibrate(10);
+                    }
+                  }}
                   className={cn(
-                    "min-w-40 bg-gradient-to-r hover:opacity-95",
-                    theme.buttonGradient,
-                    theme.buttonText,
+                    "w-full rounded-xl px-4 py-3.5 text-left transition-transform duration-150",
+                    "active:scale-[0.97] focus-visible:outline-none",
                   )}
-                  disabled={selected === undefined}
-                  onClick={onNext}
+                  style={
+                    isSelected
+                      ? { background: theme.accentHex, color: theme.badgeBtnTextClass === "text-slate-950" ? "#0F0F14" : "#fff" }
+                      : { background: "#2A2A38", color: "#CBD5E1" }
+                  }
                 >
-                  {nextLabel}
-                </Button>
-              </div>
-            </div>
+                  <div className="flex items-center gap-3">
+                    <span className="text-lg leading-none">{opt.emoji}</span>
+                    <div>
+                      <span
+                        className="text-[10px] font-bold uppercase tracking-widest"
+                        style={{
+                          fontFamily: "var(--font-dose-mono, monospace)",
+                          opacity: 0.6,
+                        }}
+                      >
+                        {opt.value}
+                      </span>
+                      <span className="ml-2 text-sm font-medium">{opt.label}</span>
+                    </div>
+                  </div>
+                </button>
+              );
+            })}
           </div>
-        </Card>
+        </div>
+      </div>
+
+      {/* ── Sticky bottom nav ─────────────────────────────── */}
+      <div
+        className="sticky bottom-0 border-t px-4 py-4"
+        style={{ background: "#0F0F14", borderColor: "#2A2A38" }}
+      >
+        <div className="mx-auto flex max-w-2xl items-center gap-3">
+          <Link
+            href={prevHref}
+            className="flex h-11 w-11 items-center justify-center rounded-xl text-slate-400 transition-colors hover:text-white"
+            style={{ background: "#2A2A38" }}
+            aria-label="Quay lại"
+          >
+            ←
+          </Link>
+
+          <button
+            type="button"
+            onClick={onNext}
+            disabled={selected === undefined}
+            className="flex-1 rounded-xl py-3 text-sm font-semibold transition-opacity disabled:opacity-30"
+            style={{
+              background: selected !== undefined ? theme.accentHex : "#2A2A38",
+              color: theme.badgeBtnTextClass === "text-slate-950" ? "#0F0F14" : "#fff",
+            }}
+          >
+            {nextLabel}
+          </button>
+        </div>
       </div>
     </main>
   );

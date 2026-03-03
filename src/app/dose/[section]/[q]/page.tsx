@@ -10,10 +10,11 @@ export async function generateStaticParams() {
   );
 }
 
-export default function DoseQuestionPage({
+export default async function DoseQuestionPage({
   params,
 }: {
-  params: { section: string; q: string };
+  params: Promise<{ section: string; q: string }>;
 }) {
-  return <DoseQuestionClient section={params.section} q={params.q} />;
+  const { section, q } = await params;
+  return <DoseQuestionClient section={section} q={q} />;
 }

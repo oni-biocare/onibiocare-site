@@ -5,187 +5,179 @@ export const DOSE_SECTIONS: Array<{
   title: string;
   subtitle: string;
 }> = [
-  {
-    key: "dopamine",
-    title: "Dopamine",
-    subtitle: "Drive, reward, focus",
-  },
-  {
-    key: "oxytocin",
-    title: "Oxytocin",
-    subtitle: "Bonding, trust, safety",
-  },
-  {
-    key: "serotonin",
-    title: "Serotonin",
-    subtitle: "Mood stability, calm confidence",
-  },
-  {
-    key: "endorphins",
-    title: "Endorphins",
-    subtitle: "Stress relief, release, resilience",
-  },
-];
+    {
+      key: "dopamine",
+      title: "Dopamine",
+      subtitle: "Động lực, phần thưởng, sự tập trung",
+    },
+    {
+      key: "oxytocin",
+      title: "Oxytocin",
+      subtitle: "Kết nối, tin tưởng, an toàn",
+    },
+    {
+      key: "serotonin",
+      title: "Serotonin",
+      subtitle: "Ổn định tâm trạng, tự tin bình thản",
+    },
+    {
+      key: "endorphins",
+      title: "Endorphins",
+      subtitle: "Giải toả căng thẳng, phục hồi, kiên cường",
+    },
+  ];
 
 export const DOSE_QUESTIONS: DoseQuestion[] = [
   {
     id: "dopamine_1",
     section: "dopamine",
     orderInSection: 1,
-    prompt: "I feel a clear sense of excitement when I start a new goal or project.",
+    prompt: "Tôi cảm thấy rõ ràng sự hứng khởi khi bắt đầu một mục tiêu hoặc dự án mới.",
   },
   {
     id: "dopamine_2",
     section: "dopamine",
     orderInSection: 2,
-    prompt:
-      "I can stay focused on tasks that matter to me without needing constant reminders.",
+    prompt: "Tôi có thể duy trì sự tập trung vào các công việc quan trọng mà không cần nhắc nhở liên tục.",
   },
   {
     id: "dopamine_3",
     section: "dopamine",
     orderInSection: 3,
-    prompt: "Completing even small tasks gives me a satisfying “progress” feeling.",
+    prompt: "Hoàn thành dù chỉ những việc nhỏ cũng mang lại cho tôi cảm giác thỏa mãn về sự tiến bộ.",
   },
   {
     id: "dopamine_4",
     section: "dopamine",
     orderInSection: 4,
-    prompt: "I feel motivated to improve my skills or learn something new.",
+    prompt: "Tôi cảm thấy có động lực để nâng cao kỹ năng hoặc học điều gì đó mới.",
   },
   {
     id: "dopamine_5",
     section: "dopamine",
     orderInSection: 5,
-    prompt: "I tend to follow through on plans I set for myself.",
+    prompt: "Tôi có xu hướng thực hiện đúng những kế hoạch mình đã đặt ra.",
   },
   {
     id: "dopamine_6",
     section: "dopamine",
     orderInSection: 6,
     reverse: true,
-    prompt: "I often feel “meh” even when good things happen.",
+    prompt: "Tôi thường cảm thấy thờ ơ ngay cả khi những điều tốt đẹp xảy ra.",
   },
 
   {
     id: "oxytocin_1",
     section: "oxytocin",
     orderInSection: 1,
-    prompt: "I feel emotionally close to at least one person in my life.",
+    prompt: "Tôi cảm thấy gần gũi về mặt cảm xúc với ít nhất một người trong cuộc sống.",
   },
   {
     id: "oxytocin_2",
     section: "oxytocin",
     orderInSection: 2,
-    prompt: "I feel safe being myself around people I trust.",
+    prompt: "Tôi cảm thấy an toàn khi là chính mình bên những người tôi tin tưởng.",
   },
   {
     id: "oxytocin_3",
     section: "oxytocin",
     orderInSection: 3,
-    prompt: "I find it easy to give or receive support in relationships.",
+    prompt: "Tôi dễ dàng cho đi hoặc nhận sự hỗ trợ trong các mối quan hệ.",
   },
   {
     id: "oxytocin_4",
     section: "oxytocin",
     orderInSection: 4,
-    prompt:
-      "Positive social time (talking, sharing, being together) leaves me feeling calmer.",
+    prompt: "Thời gian giao lưu tích cực (nói chuyện, chia sẻ, ở bên nhau) khiến tôi cảm thấy bình tâm hơn.",
   },
   {
     id: "oxytocin_5",
     section: "oxytocin",
     orderInSection: 5,
-    prompt: "I regularly experience warmth/affection (from people or pets).",
+    prompt: "Tôi thường xuyên cảm nhận được sự ấm áp và tình cảm (từ người thân hoặc thú cưng).",
   },
   {
     id: "oxytocin_6",
     section: "oxytocin",
     orderInSection: 6,
     reverse: true,
-    prompt: "I often feel disconnected from others even when I’m with them.",
+    prompt: "Tôi thường cảm thấy xa cách với người khác dù đang ở bên họ.",
   },
 
   {
     id: "serotonin_1",
     section: "serotonin",
     orderInSection: 1,
-    prompt: "My mood is generally steady across the day.",
+    prompt: "Tâm trạng của tôi nhìn chung ổn định trong suốt cả ngày.",
   },
   {
     id: "serotonin_2",
     section: "serotonin",
     orderInSection: 2,
-    prompt: "I feel content with my life overall, even if it isn’t perfect.",
+    prompt: "Tôi cảm thấy hài lòng với cuộc sống nói chung, dù nó không hoàn hảo.",
   },
   {
     id: "serotonin_3",
     section: "serotonin",
     orderInSection: 3,
-    prompt: "I feel confident in my ability to handle typical challenges.",
+    prompt: "Tôi tự tin vào khả năng của mình khi đối mặt với những thách thức thông thường.",
   },
   {
     id: "serotonin_4",
     section: "serotonin",
     orderInSection: 4,
-    prompt:
-      "I can calm myself down after stress without too much difficulty.",
+    prompt: "Tôi có thể tự xoa dịu bản thân sau khi căng thẳng mà không gặp quá nhiều khó khăn.",
   },
   {
     id: "serotonin_5",
     section: "serotonin",
     orderInSection: 5,
-    prompt:
-      "I feel respected or valued in at least one community (work, family, friends).",
+    prompt: "Tôi cảm thấy được tôn trọng hoặc đánh giá cao trong ít nhất một cộng đồng (công việc, gia đình, bạn bè).",
   },
   {
     id: "serotonin_6",
     section: "serotonin",
     orderInSection: 6,
     reverse: true,
-    prompt: "I often spiral into negative thoughts that are hard to stop.",
+    prompt: "Tôi thường rơi vào vòng xoáy của những suy nghĩ tiêu cực khó dừng lại.",
   },
 
   {
     id: "endorphins_1",
     section: "endorphins",
     orderInSection: 1,
-    prompt:
-      "After physical activity, I notice my mood improves (even slightly).",
+    prompt: "Sau khi vận động thể chất, tôi nhận thấy tâm trạng mình cải thiện (dù chỉ một chút).",
   },
   {
     id: "endorphins_2",
     section: "endorphins",
     orderInSection: 2,
-    prompt: "I frequently experience genuine laughter or lightness in my week.",
+    prompt: "Tôi thường xuyên có những khoảnh khắc cười thật sự hoặc cảm giác nhẹ nhõm trong tuần.",
   },
   {
     id: "endorphins_3",
     section: "endorphins",
     orderInSection: 3,
-    prompt:
-      "When I’m stressed, I have at least one healthy activity that helps me “reset.”",
+    prompt: "Khi căng thẳng, tôi có ít nhất một hoạt động lành mạnh giúp tôi \"làm mới\" bản thân.",
   },
   {
     id: "endorphins_4",
     section: "endorphins",
     orderInSection: 4,
-    prompt:
-      "I can tolerate discomfort (effort, fatigue, pressure) without immediately shutting down.",
+    prompt: "Tôi có thể chịu đựng sự khó chịu (nỗ lực, mệt mỏi, áp lực) mà không ngay lập tức bỏ cuộc.",
   },
   {
     id: "endorphins_5",
     section: "endorphins",
     orderInSection: 5,
-    prompt:
-      "I often feel a sense of release or relief after doing something challenging.",
+    prompt: "Tôi thường cảm thấy thoải mái hoặc nhẹ nhõm sau khi làm điều gì đó thử thách.",
   },
   {
     id: "endorphins_6",
     section: "endorphins",
     orderInSection: 6,
     reverse: true,
-    prompt: "I feel physically tense or “wired” most days.",
+    prompt: "Hầu hết các ngày, tôi cảm thấy căng thẳng về thể chất hoặc luôn trong trạng thái bồn chồn.",
   },
 ];
 

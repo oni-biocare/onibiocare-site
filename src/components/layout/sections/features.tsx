@@ -1,6 +1,8 @@
+"use client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Icon } from "@/components/ui/icon";
 import { icons } from "lucide-react";
+import { useScrollAnimation } from "@/lib/useScrollAnimation";
 
 interface FeaturesProps {
   icon: string;
@@ -18,7 +20,7 @@ const featureList: FeaturesProps[] = [
     icon: "HandHeart",
     title: "An toàn",
     description:
-      "Dịch vụ được thực hiện bởi chuyên viên được đào tạo chuyên sâu, đảm bảo quy trình an toàn và hiệu quả ngay tại không gian riêng tư của bạn..",
+      "Dịch vụ được thực hiện bởi chuyên viên được đào tạo chuyên sâu, đảm bảo quy trình an toàn và hiệu quả ngay tại không gian riêng tư của bạn.",
   },
   {
     icon: "BadgeCheck",
@@ -38,7 +40,6 @@ const featureList: FeaturesProps[] = [
     description:
       "Cung cấp giải pháp trị liệu chất lượng cao với chi phí cạnh tranh, mang lại giá trị lâu dài cho sức khỏe.",
   },
-
   {
     icon: "Gift",
     title: "Quà tặng",
@@ -48,24 +49,30 @@ const featureList: FeaturesProps[] = [
 ];
 
 export const FeaturesSection = () => {
+  useScrollAnimation();
+
   return (
-    <section id="features" className="container py-24 sm:py-32">
-      <h2 className="text-lg text-primary text-center mb-2 tracking-wider">
+    <section id="features" className="container py-24 sm:py-32 relative overflow-hidden section-glow-left">
+      <h2 className="text-lg text-primary text-center mb-2 tracking-wider animate-on-scroll">
         Giá trị
       </h2>
 
-      <h2 className="text-3xl md:text-4xl text-center font-bold mb-4">
+      <h2 className="text-3xl md:text-4xl text-center font-bold mb-4 animate-on-scroll" style={{ transitionDelay: "80ms" }}>
         Điều gì khiến chúng tôi khác biệt?
       </h2>
 
-      <h3 className="md:w-1/2 mx-auto text-xl text-center text-muted-foreground mb-8">
+      <h3 className="md:w-1/2 mx-auto text-xl text-center text-muted-foreground mb-8 animate-on-scroll" style={{ transitionDelay: "160ms" }}>
         Chúng tôi mang đến dịch vụ trị liệu tại nhà, giúp bạn tận hưởng sự an toàn, tiện lợi và thư giãn tối đa.
       </h3>
 
-      <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-        {featureList.map(({ icon, title, description }) => (
-          <div key={title}>
-            <Card className="h-full bg-background border-0 shadow-none">
+      <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 relative z-10">
+        {featureList.map(({ icon, title, description }, index) => (
+          <div
+            key={title}
+            className="animate-on-scroll"
+            style={{ transitionDelay: `${200 + index * 80}ms` }}
+          >
+            <Card className="h-full glass-card rounded-xl">
               <CardHeader className="flex justify-center items-center">
                 <div className="bg-primary/20 p-2 rounded-full ring-8 ring-primary/10 mb-4">
                   <Icon

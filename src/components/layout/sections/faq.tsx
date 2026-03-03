@@ -1,9 +1,11 @@
+"use client";
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { useScrollAnimation } from "@/lib/useScrollAnimation";
 
 interface FAQProps {
   question: string;
@@ -24,8 +26,7 @@ const FAQList: FAQProps[] = [
     value: "item-2",
   },
   {
-    question:
-      "Làm thế nào để đặt lịch hẹn?",
+    question: "Làm thế nào để đặt lịch hẹn?",
     answer:
       "Bạn có thể đặt lịch qua các trang mạng xã hội, hotline hoặc ứng dụng của Oni Biocare. Chúng tôi linh hoạt trong thời gian để phù hợp với lịch trình của bạn.",
     value: "item-3",
@@ -36,17 +37,18 @@ const FAQList: FAQProps[] = [
     value: "item-4",
   },
   {
-    question:
-      "Dịch vụ có phù hợp cho người cao tuổi không?",
+    question: "Dịch vụ có phù hợp cho người cao tuổi không?",
     answer: "Hoàn toàn phù hợp! Các liệu trình của chúng tôi đặc biệt được thiết kế để hỗ trợ người cao tuổi giảm đau nhức, thư giãn và cải thiện sức khỏe toàn diện.",
     value: "item-5",
   },
 ];
 
 export const FAQSection = () => {
+  useScrollAnimation();
+
   return (
-    <section id="faq" className="container md:w-[700px] py-24 sm:py-32">
-      <div className="text-center mb-8">
+    <section id="faq" className="container md:w-[700px] py-24 sm:py-32 relative overflow-hidden section-glow-right">
+      <div className="text-center mb-8 animate-on-scroll relative z-10">
         <h2 className="text-lg text-primary text-center mb-2 tracking-wider">
           FAQS
         </h2>
@@ -56,9 +58,14 @@ export const FAQSection = () => {
         </h2>
       </div>
 
-      <Accordion type="single" collapsible className="AccordionRoot">
-        {FAQList.map(({ question, answer, value }) => (
-          <AccordionItem key={value} value={value}>
+      <Accordion type="single" collapsible className="AccordionRoot relative z-10">
+        {FAQList.map(({ question, answer, value }, index) => (
+          <AccordionItem
+            key={value}
+            value={value}
+            className="animate-on-scroll"
+            style={{ transitionDelay: `${index * 80}ms` }}
+          >
             <AccordionTrigger className="text-left">
               {question}
             </AccordionTrigger>

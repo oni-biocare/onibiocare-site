@@ -81,23 +81,7 @@ export const TeamSection = () => {
         },
       ],
     },
-    {
-      imageUrl:
-        "/img_kimhuong_avatar.jpeg",
-      firstName: "Nguyễn T.",
-      lastName: "Kim Hường",
-      positions: ["Với hơn 5 năm kinh nghiệm kinh doanh và thiết kế trải nghiệm của khách hàng, luôn đặt sự hài lòng của khách hàng lên hàng đầu"],
-      socialNetworks: [
-        {
-          name: "LinkedIn",
-          url: "https://www.linkedin.com/in/hường-nguyễn-20a467337/?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=ios_app",
-        },
-        {
-          name: "Facebook",
-          url: "https://www.facebook.com/share/19gGDgpcvD/?mibextid=wwXIfr",
-        }
-      ],
-    },
+
   ];
   const socialIcon = (socialName: string) => {
     switch (socialName) {
@@ -107,7 +91,7 @@ export const TeamSection = () => {
         return <GithubIcon />;
       case "Facebook":
         return <Facebook />;
-        case "Youtube":
+      case "Youtube":
         return <YoutubeIcon />;
     }
   };
@@ -152,9 +136,8 @@ export const TeamSection = () => {
               {positions.map((position, index) => (
                 <CardContent
                   key={index}
-                  className={`pb-0 text-muted-foreground ${
-                    index === positions.length - 1 && "pb-6"
-                  }`}
+                  className={`pb-0 text-muted-foreground ${index === positions.length - 1 && "pb-6"
+                    }`}
                 >
                   {position}
                   {index < positions.length - 1 && <span>,</span>}

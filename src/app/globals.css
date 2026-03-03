@@ -2,6 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ── Font Variables ── */
+:root {
+  --font-sans: 'Plus Jakarta Sans', system-ui, sans-serif;
+  --font-display: 'Playfair Display', Georgia, serif;
+}
+
 html {
   scroll-behavior: smooth;
 }
@@ -226,7 +232,92 @@ html {
   }
   body {
     @apply bg-background text-foreground;
+    font-family: var(--font-sans);
   }
+  h1, h2, h3 {
+    font-family: var(--font-display);
+  }
+}
+
+/* ── Scroll-driven Fade-In Animations ── */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(28px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.animate-on-scroll {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.animate-on-scroll.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ── Glassmorphism Card ── */
+.glass-card {
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.18);
+  transition: box-shadow 0.3s ease, transform 0.3s ease;
+}
+
+.glass-card:hover {
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.28);
+  transform: translateY(-3px);
+}
+
+/* Light mode overrides for glass */
+:root:not(.dark) .glass-card {
+  background: rgba(255, 255, 255, 0.72);
+  border: 1px solid rgba(0, 0, 0, 0.07);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+}
+
+:root:not(.dark) .glass-card:hover {
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.14);
+}
+
+/* ── Section Ambient Glows ── */
+.section-glow-left::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: -8%;
+  transform: translateY(-50%);
+  width: 45%;
+  height: 70%;
+  background: radial-gradient(ellipse, hsl(var(--primary) / 0.07) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.section-glow-right::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  right: -8%;
+  transform: translateY(-50%);
+  width: 45%;
+  height: 70%;
+  background: radial-gradient(ellipse, hsl(var(--subheading) / 0.07) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 0;
 }
 
 /* Table Styles for Markdown Content */

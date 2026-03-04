@@ -1,7 +1,6 @@
 "use client";
 
 import { DOSE_SECTIONS, getDoseQuestionsForSection } from "@/lib/dose/questions";
-import { DOSE_SECTION_ORDER } from "@/lib/dose/constants";
 import { DOSE_THEMES } from "@/lib/dose/theme";
 import { useDose } from "@/lib/dose/store";
 import type { DoseSectionKey, LikertValue } from "@/lib/dose/types";
@@ -58,10 +57,14 @@ export default function DoseQuestionClient({
   q: string;
 }) {
   const router = useRouter();
-  const { answers, setAnswer } = useDose();
+  const { answers, setAnswer, activeSections } = useDose();
 
   if (!isSectionKey(section)) notFound();
   const sectionKey = section;
+
+  // Guard: if this section is not in the active mode, redirect to /dose
+  // (handles direct URL navigation while a single-hormone mode is selected)
+  // We can't call hooks conditionally, so we do the check after hooks.
 
   const theme = DOSE_THEMES[sectionKey];
 
@@ -82,35 +85,35 @@ export default function DoseQuestionClient({
 
   const prevHref = useMemo(() => {
     if (qIndex > 1) return `/dose/${sectionKey}/${qIndex - 1}`;
-    const sectionPos = DOSE_SECTION_ORDER.indexOf(sectionKey);
+    const sectionPos = activeSections.indexOf(sectionKey);
     if (sectionPos > 0) {
-      const prevSection = DOSE_SECTION_ORDER[sectionPos - 1];
+      const prevSection = activeSections[sectionPos - 1];
       return `/dose/${prevSection}/6`;
     }
     return `/dose`;
-  }, [qIndex, sectionKey]);
+  }, [qIndex, sectionKey, activeSections]);
 
   const nextHref = useMemo(() => {
     if (qIndex < 6) return `/dose/${sectionKey}/${qIndex + 1}`;
-    const sectionPos = DOSE_SECTION_ORDER.indexOf(sectionKey);
-    if (sectionPos < DOSE_SECTION_ORDER.length - 1) {
-      const nextSection = DOSE_SECTION_ORDER[sectionPos + 1];
+    const sectionPos = activeSections.indexOf(sectionKey);
+    if (sectionPos < activeSections.length - 1) {
+      const nextSection = activeSections[sectionPos + 1];
       return `/dose/${nextSection}/1`;
     }
     return `/dose/results`;
-  }, [qIndex, sectionKey]);
+  }, [qIndex, sectionKey, activeSections]);
 
   const nextLabel = useMemo(() => {
     if (qIndex < 6) return "Tiếp →";
-    const sectionPos = DOSE_SECTION_ORDER.indexOf(sectionKey);
-    if (sectionPos < DOSE_SECTION_ORDER.length - 1) {
+    const sectionPos = activeSections.indexOf(sectionKey);
+    if (sectionPos < activeSections.length - 1) {
       const nextSection = DOSE_SECTIONS.find(
-        (s) => s.key === DOSE_SECTION_ORDER[sectionPos + 1],
+        (s) => s.key === activeSections[sectionPos + 1],
       );
       return `${nextSection?.title ?? "Tiếp"} →`;
     }
     return "Xem Kết Quả →";
-  }, [qIndex, sectionKey]);
+  }, [qIndex, sectionKey, activeSections]);
 
   const [showInterstitial, setShowInterstitial] = useState(false);
 
@@ -133,12 +136,12 @@ export default function DoseQuestionClient({
 
   /* ─── Interstitial ─────────────────────────────────────── */
   if (showInterstitial) {
-    const sectionPos = DOSE_SECTION_ORDER.indexOf(sectionKey);
-    const isLastSection = sectionPos === DOSE_SECTION_ORDER.length - 1;
+    const sectionPos = activeSections.indexOf(sectionKey);
+    const isLastSection = sectionPos === activeSections.length - 1;
 
     // Use NEXT section's identity for the animation preview
     const nextSectionKey = !isLastSection
-      ? DOSE_SECTION_ORDER[sectionPos + 1]
+      ? activeSections[sectionPos + 1]
       : null;
     const nextTheme = nextSectionKey ? DOSE_THEMES[nextSectionKey] : null;
     const nextSectionMeta = nextSectionKey
@@ -216,9 +219,9 @@ export default function DoseQuestionClient({
             </>
           )}
 
-          {/* Segmented section progress bar */}
+          {/* Segmented section progress bar — only active sections */}
           <div className="mt-6 flex gap-1 justify-center">
-            {DOSE_SECTION_ORDER.map((k, i) => {
+            {activeSections.map((k, i) => {
               const done = i <= sectionPos;
               const isNext = i === sectionPos + 1;
               return (

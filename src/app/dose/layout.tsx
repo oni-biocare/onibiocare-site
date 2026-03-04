@@ -21,7 +21,11 @@ export default function DoseLayout({
   return (
     <DoseProvider>
       <DoseDarkMode />
+      {/* suppressHydrationWarning: DoseDarkMode forces dark theme client-side,
+          which causes the global Navbar's Sun/Moon icon to differ between SSR and CSR.
+          This is intentional — we suppress the warning instead of re-architecting the Navbar. */}
       <div
+        suppressHydrationWarning
         className={`${spaceGrotesk.variable} ${spaceMono.variable} [--dose-bg:#0F0F14] [--dose-surface:#1C1C26] [--dose-btn:#2A2A38]`}
         style={{ fontFamily: "var(--font-dose-grotesk), system-ui, sans-serif" }}
       >

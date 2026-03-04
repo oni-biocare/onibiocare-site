@@ -2,7 +2,8 @@
 
 import { DOSE_SECTIONS } from "@/lib/dose/questions";
 import { computeDoseResults, doseRadarChartData } from "@/lib/dose/scoring";
-import { DOSE_SECTION_ORDER, useDose } from "@/lib/dose/store";
+import { useDose } from "@/lib/dose/store";
+import { DOSE_SECTION_ORDER } from "@/lib/dose/constants";
 import { DOSE_THEMES } from "@/lib/dose/theme";
 import type { DoseSectionKey } from "@/lib/dose/types";
 import Link from "next/link";
@@ -53,11 +54,14 @@ function BandBadge({ band, accentHex }: { band: string; accentHex: string }) {
 
 export default function DoseResultsPage() {
   const router = useRouter();
-  const { answers, reset } = useDose();
+  const { answers, reset, activeSections } = useDose();
 
+  // Require all 6 answers per active section
+  const requiredCount = activeSections.length * 6;
   const hasAllAnswers = useMemo(
-    () => Object.values(answers).filter((v) => v !== undefined).length === 24,
-    [answers],
+    () => Object.values(answers).filter((v) => v !== undefined).length === requiredCount,
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [answers, requiredCount],
   );
 
   useEffect(() => {
@@ -65,7 +69,8 @@ export default function DoseResultsPage() {
   }, [hasAllAnswers, router]);
 
   const results = useMemo(
-    () => (hasAllAnswers ? computeDoseResults(answers) : null),
+    () => (hasAllAnswers ? computeDoseResults(answers, activeSections) : null),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [answers, hasAllAnswers],
   );
 
@@ -132,9 +137,13 @@ export default function DoseResultsPage() {
     [],
   );
 
-  if (!hasAllAnswers || !results || !data || !pillarTheme || !priorityTheme) {
+  const isSingleMode = activeSections.length === 1;
+
+  if (!hasAllAnswers || !results || !pillarTheme || !priorityTheme) {
     return null;
   }
+  // Radar chart data only required for multi-section mode
+  if (!isSingleMode && !data) return null;
 
   return (
     <main
@@ -148,7 +157,9 @@ export default function DoseResultsPage() {
       >
         <div className="mx-auto max-w-3xl space-y-4">
           <div className="text-xs font-bold uppercase tracking-widest text-slate-500">
-            Hồ Sơ D.O.S.E Của Bạn
+            {isSingleMode
+              ? `Kết Quả ${sectionTitle(activeSections[0])}`
+              : "Hồ Sơ D.O.S.E Của Bạn"}
           </div>
           <h1
             className="text-3xl font-bold text-white sm:text-4xl"
@@ -163,42 +174,49 @@ export default function DoseResultsPage() {
               className="flex flex-col gap-1 rounded-xl px-4 py-3"
               style={{ background: "#1C1C26", borderLeft: `3px solid ${pillarTheme.accentHex}` }}
             >
-              <span className="text-xs text-slate-500">Điểm Mạnh</span>
+              <span className="text-xs text-slate-500">
+                {isSingleMode ? "Kết Quả" : "Điểm Mạnh"}
+              </span>
               <span className="text-lg font-bold" style={{ color: pillarTheme.accentHex }}>
                 {sectionTitle(results.insights.pillar)}
               </span>
             </div>
-            <div
-              className="flex flex-col gap-1 rounded-xl px-4 py-3"
-              style={{ background: "#1C1C26", borderLeft: `3px solid ${priorityTheme.accentHex}` }}
-            >
-              <span className="text-xs text-slate-500">Ưu Tiên Phát Triển</span>
-              <span className="text-lg font-bold" style={{ color: priorityTheme.accentHex }}>
-                {sectionTitle(results.insights.priority)}
-              </span>
-            </div>
+            {/* Only show the Priority box in multi-section / Tổng hợp mode */}
+            {!isSingleMode && (
+              <div
+                className="flex flex-col gap-1 rounded-xl px-4 py-3"
+                style={{ background: "#1C1C26", borderLeft: `3px solid ${priorityTheme.accentHex}` }}
+              >
+                <span className="text-xs text-slate-500">Ưu Tiên Phát Triển</span>
+                <span className="text-lg font-bold" style={{ color: priorityTheme.accentHex }}>
+                  {sectionTitle(results.insights.priority)}
+                </span>
+              </div>
+            )}
           </div>
         </div>
       </div>
 
       <div className="mx-auto max-w-3xl space-y-6 p-4 pb-12">
 
-        {/* ── Radar chart ─────────────────────────────────────── */}
-        <div
-          className="rounded-2xl p-4"
-          style={{ background: "#1C1C26" }}
-        >
-          <div className="h-[300px] w-full sm:h-[360px]">
-            <Radar data={data} options={options} />
+        {/* ── Radar chart — only shown for multi-section modes ──── */}
+        {activeSections.length > 1 && (
+          <div
+            className="rounded-2xl p-4"
+            style={{ background: "#1C1C26" }}
+          >
+            <div className="h-[300px] w-full sm:h-[360px]">
+              <Radar data={data!} options={options} />
+            </div>
+            <p className="mt-2 text-center text-xs text-slate-600">
+              Điểm từ 6–30 mỗi lĩnh vực (tổng của 6 câu hỏi)
+            </p>
           </div>
-          <p className="mt-2 text-center text-xs text-slate-600">
-            Điểm từ 6–30 mỗi lĩnh vực (tổng của 6 câu hỏi)
-          </p>
-        </div>
+        )}
 
         {/* ── Section score cards 2×2 ─────────────────────────── */}
         <div className="grid gap-3 sm:grid-cols-2">
-          {DOSE_SECTION_ORDER.map((key) => {
+          {activeSections.map((key: DoseSectionKey) => {
             const s = results.scores[key];
             const t = DOSE_THEMES[key];
             return (
@@ -230,23 +248,25 @@ export default function DoseResultsPage() {
 
                 <p className="mb-3 text-sm text-slate-300">{s.state}</p>
 
-                {/* Pattern chips */}
-                <div className="mb-3 flex flex-wrap gap-1.5">
-                  {s.patterns.map((p) => (
-                    <span
-                      key={p}
-                      className="rounded px-2 py-0.5 text-[11px] font-medium"
-                      style={{ background: "#2A2A38", color: "#94A3B8" }}
-                    >
-                      {p}
-                    </span>
-                  ))}
-                </div>
+                {/* Pattern chips — skip empty placeholders */}
+                {s.patterns.some((p: string) => p.length > 0) && (
+                  <div className="mb-3 flex flex-wrap gap-1.5">
+                    {s.patterns.filter((p: string) => p.length > 0).map((p: string) => (
+                      <span
+                        key={p}
+                        className="rounded px-2 py-0.5 text-[11px] font-medium"
+                        style={{ background: "#2A2A38", color: "#94A3B8" }}
+                      >
+                        {p}
+                      </span>
+                    ))}
+                  </div>
+                )}
 
                 {/* Suggestions */}
                 {s.suggestions && (
                   <ul className="space-y-0.5 text-xs text-slate-500">
-                    {s.suggestions.map((sug) => (
+                    {s.suggestions.map((sug: string) => (
                       <li key={sug} className="flex items-start gap-1.5">
                         <span style={{ color: t.accentHex }}>›</span>
                         {sug}

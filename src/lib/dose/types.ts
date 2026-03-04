@@ -1,5 +1,8 @@
 export type DoseSectionKey = "dopamine" | "oxytocin" | "serotonin" | "endorphins";
 
+/** Which questionnaire mode the user selected on the intro page */
+export type DoseModeKey = DoseSectionKey | "all";
+
 export type LikertValue = 1 | 2 | 3 | 4 | 5;
 
 export type DoseBandLabel =

@@ -36,15 +36,13 @@ export function scoreQuestion(q: DoseQuestion, raw: LikertValue): LikertValue {
 export function scoreSection(
   section: DoseSectionKey,
   answers: DoseAnswers,
-): number {
+): number | null {
   const questions = DOSE_QUESTIONS.filter((q) => q.section === section);
   let sum = 0;
 
   for (const q of questions) {
     const raw = answers[q.id];
-    if (raw === undefined) {
-      throw new Error(`Missing answer for ${q.id}`);
-    }
+    if (raw === undefined) return null; // section not answered
     sum += scoreQuestion(q, raw);
   }
 
@@ -215,6 +213,17 @@ export function computeDoseScores(answers: DoseAnswers): DoseScoresBySection {
 
   for (const section of SECTION_ORDER) {
     const raw = scoreSection(section, answers);
+    if (raw === null) {
+      // Section was not answered (single-hormone mode) — use a placeholder score
+      scores[section] = {
+        raw: 0,
+        band: "Very Low",
+        state: "",
+        patterns: ["", ""],
+        suggestions: [],
+      };
+      continue;
+    }
     const band = bandForScore(raw);
     const copy = copyForSection(section, band);
 
@@ -230,18 +239,19 @@ export function computeDoseScores(answers: DoseAnswers): DoseScoresBySection {
   return scores;
 }
 
-export function pickPillar(scores: DoseScoresBySection): DoseSectionKey {
-  let best = SECTION_ORDER[0];
-  for (const section of SECTION_ORDER) {
+export function pickPillar(scores: DoseScoresBySection, sections: DoseSectionKey[] = SECTION_ORDER): DoseSectionKey {
+  let best = sections[0];
+  for (const section of sections) {
     if (scores[section].raw > scores[best].raw) best = section;
   }
   return best;
 }
 
-export function pickPriority(scores: DoseScoresBySection): DoseSectionKey {
-  let worst = SECTION_ORDER[0];
-  for (const section of SECTION_ORDER) {
-    if (scores[section].raw < scores[worst].raw) worst = section;
+export function pickPriority(scores: DoseScoresBySection, sections: DoseSectionKey[] = SECTION_ORDER): DoseSectionKey {
+  let worst = sections[0];
+  for (const section of sections) {
+    // Only compare sections that were actually answered (raw > 0)
+    if (scores[section].raw > 0 && scores[section].raw < scores[worst].raw) worst = section;
   }
   return worst;
 }
@@ -249,30 +259,37 @@ export function pickPriority(scores: DoseScoresBySection): DoseSectionKey {
 export function balanceInsight(
   pillar: DoseSectionKey,
   priority: DoseSectionKey,
+  activeSections: DoseSectionKey[] = SECTION_ORDER,
 ): string {
   const pillarName = sectionName(pillar);
-  const priorityName = sectionName(priority);
   const pillarTrait = traitForSection(pillar);
+
+  // Single-hormone mode: give a focused message for just that one hormone
+  if (activeSections.length === 1) {
+    return `Hôm nay bạn đã kiểm tra ${pillarName}. Hãy tiếp tục duy trì thói quen để củng cố ${pillarTrait} của bạn.`;
+  }
+
+  const priorityName = sectionName(priority);
   const priorityTrait = traitForSection(priority);
 
   if (pillar === priority) {
-    return `Hồ sơ của bạn khá cân bằng trên cả bốn lĩnh vực. Hãy tiếp tục duy trì thói quen để củng cố ${pillarTrait}.`;
+    return `Hồ sơ của bạn khá cân bằng. Hãy tiếp tục duy trì thói quen để củng cố ${pillarTrait}.`;
   }
 
   return `Bạn mạnh hơn ở ${pillarName} (${pillarTrait}), nhưng thấp hơn ở ${priorityName} (${priorityTrait}). Hãy tập trung vào những thói quen nhỏ để phát triển ${priorityTrait} trong khi bảo vệ ${pillarTrait} của bạn.`;
 }
 
-export function computeDoseResults(answers: DoseAnswers): DoseResults {
+export function computeDoseResults(answers: DoseAnswers, activeSections: DoseSectionKey[] = SECTION_ORDER): DoseResults {
   const scores = computeDoseScores(answers);
-  const pillar = pickPillar(scores);
-  const priority = pickPriority(scores);
+  const pillar = pickPillar(scores, activeSections);
+  const priority = pickPriority(scores, activeSections);
 
   return {
     scores,
     insights: {
       pillar,
       priority,
-      balance: balanceInsight(pillar, priority),
+      balance: balanceInsight(pillar, priority, activeSections),
     },
   };
 }

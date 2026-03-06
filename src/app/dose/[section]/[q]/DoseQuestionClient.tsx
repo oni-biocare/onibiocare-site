@@ -9,6 +9,7 @@ import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import Lottie from "lottie-react";
 import { getDoseInterstitialAnimation } from "@/lib/dose/interstitialAnimations";
+import { DoseSnowfall } from "../../results/DoseSnowfall";
 import { notFound, useRouter } from "next/navigation";
 
 const SCALE: Array<{ value: LikertValue; label: string; emoji: string }> = [
@@ -155,11 +156,12 @@ export default function DoseQuestionClient({
 
     return (
       <main
-        className="flex min-h-screen items-center justify-center p-6"
+        className="relative flex min-h-screen items-center justify-center p-6"
         style={{
-          background: "radial-gradient(ellipse 70% 55% at 50% 30%, #1a0a2e 0%, #0D0D18 60%)",
+          background: `radial-gradient(ellipse 70% 55% at 50% 30%, ${displayAccent}18 0%, #0D0D18 60%)`,
         }}
       >
+        <DoseSnowfall accentHex={displayAccent} count={40} />
         <div
           className="w-full max-w-sm rounded-2xl p-8 text-center"
           style={{
@@ -260,11 +262,12 @@ export default function DoseQuestionClient({
   /* ─── Question screen ───────────────────────────────────── */
   return (
     <main
-      className="flex min-h-screen flex-col"
+      className="relative flex min-h-screen flex-col"
       style={{
         background: `radial-gradient(ellipse 90% 40% at 50% 0%, ${theme.accentHex}18 0%, #0D0D18 50%)`,
       }}
     >
+      <DoseSnowfall accentHex={theme.accentHex} count={40} />
       {/* ── Sticky top bar ────────────────────────────────── */}
       <div
         className="sticky top-0 z-10 border-b px-4 py-3 backdrop-blur-sm"

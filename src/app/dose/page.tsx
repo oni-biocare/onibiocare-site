@@ -4,6 +4,7 @@ import { DOSE_MODE_SECTIONS } from "@/lib/dose/constants";
 import { DOSE_SECTIONS } from "@/lib/dose/questions";
 import { useDose } from "@/lib/dose/store";
 import { DoseModeSelector } from "./DoseModeSelector";
+import { DoseSnowfall } from "./results/DoseSnowfall";
 import { useRouter } from "next/navigation";
 
 const LETTER_COLORS: Record<string, string> = {
@@ -25,13 +26,18 @@ export default function DoseIntroPage() {
 
   const activeColor = selectedMode ? (LETTER_COLORS[selectedMode] ?? "#F59E0B") : null;
 
+  // Snow color: active mode accent, or a soft violet when nothing is selected
+  const snowColor = activeColor ?? "#A78BFA";
+
   return (
     <main
-      className="flex min-h-screen flex-col items-center justify-center p-6"
+      className="relative flex min-h-screen flex-col items-center justify-center p-6"
       style={{
-        background: "radial-gradient(ellipse 80% 60% at 50% 0%, #1a0a2e 0%, #0D0D18 55%, #0D0D18 100%)",
+        background: `radial-gradient(ellipse 80% 60% at 50% 0%, ${snowColor}18 0%, #0D0D18 55%, #0D0D18 100%)`,
       }}
     >
+      {/* Snowfall — tinted with the selected hormone colour */}
+      <DoseSnowfall accentHex={snowColor} count={45} />
       <div className="flex w-full max-w-sm flex-col items-center gap-8">
 
         {/* D·O·S·E wordmark — colour-blocked letters with glow */}

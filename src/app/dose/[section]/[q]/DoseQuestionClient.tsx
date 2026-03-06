@@ -156,16 +156,26 @@ export default function DoseQuestionClient({
     return (
       <main
         className="flex min-h-screen items-center justify-center p-6"
-        style={{ background: "#0F0F14" }}
+        style={{
+          background: "radial-gradient(ellipse 70% 55% at 50% 30%, #1a0a2e 0%, #0D0D18 60%)",
+        }}
       >
         <div
           className="w-full max-w-sm rounded-2xl p-8 text-center"
-          style={{ background: "#1C1C26" }}
+          style={{
+            background: "#18182A",
+            border: `2px solid ${displayAccent}55`,
+            boxShadow: `0 0 40px ${displayAccent}33, 0 0 12px ${displayAccent}22 inset`,
+          }}
         >
           {/* Animation icon — themed to the NEXT section */}
           <div
-            className="mx-auto mb-5 flex h-24 w-24 items-center justify-center rounded-xl"
-            style={{ background: displayAccent + "22" }}
+            className="mx-auto mb-5 flex h-24 w-24 items-center justify-center rounded-xl dose-glow-pulse"
+            style={{
+              background: `radial-gradient(circle, ${displayAccent}44, ${displayAccent}18)`,
+              border: `1px solid ${displayAccent}66`,
+              boxShadow: `0 0 20px ${displayAccent}44`,
+            }}
           >
             {isLastSection ? (
               /* Final section: star completion icon */
@@ -209,6 +219,7 @@ export default function DoseQuestionClient({
                 style={{
                   fontFamily: "var(--font-dose-grotesk, inherit)",
                   color: displayAccent,
+                  textShadow: `0 0 20px ${displayAccent}88`,
                 }}
               >
                 {nextSectionMeta?.title}
@@ -233,7 +244,8 @@ export default function DoseQuestionClient({
                       ? theme.accentHex
                       : isNext
                         ? displayAccent + "55"
-                        : "#2A2A38",
+                        : "#252540",
+                    boxShadow: done ? `0 0 6px ${theme.accentHex}88` : "none",
                   }}
                 />
               );
@@ -249,19 +261,26 @@ export default function DoseQuestionClient({
   return (
     <main
       className="flex min-h-screen flex-col"
-      style={{ background: "#0F0F14" }}
+      style={{
+        background: `radial-gradient(ellipse 90% 40% at 50% 0%, ${theme.accentHex}18 0%, #0D0D18 50%)`,
+      }}
     >
       {/* ── Sticky top bar ────────────────────────────────── */}
       <div
-        className="sticky top-0 z-10 border-b px-4 py-3"
-        style={{ background: "#0F0F14", borderColor: "#2A2A38" }}
+        className="sticky top-0 z-10 border-b px-4 py-3 backdrop-blur-sm"
+        style={{
+          background: "#0D0D18CC",
+          borderColor: theme.accentHex + "44",
+        }}
       >
         <div className="mx-auto flex max-w-2xl items-center justify-between gap-4">
           <span
             className="rounded-md px-2.5 py-1 text-[11px] font-bold uppercase tracking-widest"
             style={{
-              background: theme.accentHex + "22",
+              background: theme.accentHex + "33",
               color: theme.accentHex,
+              border: `1px solid ${theme.accentHex}55`,
+              boxShadow: `0 0 8px ${theme.accentHex}33`,
             }}
           >
             {sectionLabel(sectionKey)}
@@ -282,8 +301,11 @@ export default function DoseQuestionClient({
           {Array.from({ length: 6 }, (_, i) => (
             <div
               key={i}
-              className="h-1 flex-1 rounded-full transition-colors duration-300"
-              style={{ background: i < qIndex ? theme.accentHex : "#2A2A38" }}
+              className="h-1.5 flex-1 rounded-full transition-all duration-300"
+              style={{
+                background: i < qIndex ? theme.accentHex : "#252540",
+                boxShadow: i < qIndex ? `0 0 8px ${theme.accentHex}88` : "none",
+              }}
             />
           ))}
         </div>
@@ -296,7 +318,11 @@ export default function DoseQuestionClient({
 
           <span
             className="inline-block rounded-md px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wide"
-            style={{ background: "#2A2A38", color: "#94A3B8" }}
+            style={{
+              background: theme.accentHex + "22",
+              color: theme.accentHex + "CC",
+              border: `1px solid ${theme.accentHex}33`,
+            }}
           >
             {encouragement(qIndex)}
           </span>
@@ -323,17 +349,32 @@ export default function DoseQuestionClient({
                     }
                   }}
                   className={cn(
-                    "w-full rounded-xl px-4 py-3.5 text-left transition-transform duration-150",
+                    "w-full rounded-xl px-4 py-3.5 text-left transition-all duration-200",
                     "active:scale-[0.97] focus-visible:outline-none",
                   )}
                   style={
                     isSelected
-                      ? { background: theme.accentHex, color: theme.badgeBtnTextClass === "text-slate-950" ? "#0F0F14" : "#fff" }
-                      : { background: "#2A2A38", color: "#CBD5E1" }
+                      ? {
+                        background: `linear-gradient(135deg, ${theme.accentHex}EE, ${theme.accentHex}BB)`,
+                        color: theme.badgeBtnTextClass === "text-slate-950" ? "#0F0F14" : "#fff",
+                        boxShadow: `0 0 20px ${theme.accentHex}66, 0 0 6px ${theme.accentHex}44 inset`,
+                        border: `1px solid ${theme.accentHex}`,
+                      }
+                      : {
+                        background: "#252540",
+                        color: "#CBD5E1",
+                        borderLeft: `3px solid ${theme.accentHex}33`,
+                        border: `1px solid #252540`,
+                      }
                   }
                 >
                   <div className="flex items-center gap-3">
-                    <span className="text-lg leading-none">{opt.emoji}</span>
+                    <span
+                      className="text-lg leading-none transition-transform duration-200"
+                      style={{ transform: isSelected ? "scale(1.2)" : "scale(1)" }}
+                    >
+                      {opt.emoji}
+                    </span>
                     <div>
                       <span
                         className="text-[10px] font-bold uppercase tracking-widest"
@@ -356,14 +397,14 @@ export default function DoseQuestionClient({
 
       {/* ── Sticky bottom nav ─────────────────────────────── */}
       <div
-        className="sticky bottom-0 border-t px-4 py-4"
-        style={{ background: "#0F0F14", borderColor: "#2A2A38" }}
+        className="sticky bottom-0 border-t px-4 py-4 backdrop-blur-sm"
+        style={{ background: "#0D0D18CC", borderColor: theme.accentHex + "33" }}
       >
         <div className="mx-auto flex max-w-2xl items-center gap-3">
           <Link
             href={prevHref}
             className="flex h-11 w-11 items-center justify-center rounded-xl text-slate-400 transition-colors hover:text-white"
-            style={{ background: "#2A2A38" }}
+            style={{ background: "#252540", border: "1px solid #303060" }}
             aria-label="Quay lại"
           >
             ←
@@ -373,10 +414,13 @@ export default function DoseQuestionClient({
             type="button"
             onClick={onNext}
             disabled={selected === undefined}
-            className="flex-1 rounded-xl py-3 text-sm font-semibold transition-opacity disabled:opacity-30"
+            className="flex-1 rounded-xl py-3 text-sm font-semibold transition-all duration-200 disabled:opacity-30"
             style={{
-              background: selected !== undefined ? theme.accentHex : "#2A2A38",
+              background: selected !== undefined
+                ? `linear-gradient(135deg, ${theme.accentHex}EE, ${theme.accentHex}AA)`
+                : "#252540",
               color: theme.badgeBtnTextClass === "text-slate-950" ? "#0F0F14" : "#fff",
+              boxShadow: selected !== undefined ? `0 0 18px ${theme.accentHex}66` : "none",
             }}
           >
             {nextLabel}

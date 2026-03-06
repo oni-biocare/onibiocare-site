@@ -7,6 +7,7 @@ import { DOSE_SECTION_ORDER } from "@/lib/dose/constants";
 import { DOSE_THEMES } from "@/lib/dose/theme";
 import type { DoseSectionKey } from "@/lib/dose/types";
 import Link from "next/link";
+import { DoseSnowfall } from "./DoseSnowfall";
 import {
   Chart as ChartJS,
   Filler,
@@ -45,7 +46,12 @@ function BandBadge({ band, accentHex }: { band: string; accentHex: string }) {
   return (
     <span
       className="inline-block rounded px-2 py-0.5 text-[10px] font-bold uppercase tracking-widest"
-      style={{ background: accentHex + "28", color: accentHex }}
+      style={{
+        background: accentHex + "44",
+        color: accentHex,
+        border: `1px solid ${accentHex}66`,
+        boxShadow: `0 0 6px ${accentHex}33`,
+      }}
     >
       {BAND_VI[band] ?? band}
     </span>
@@ -93,7 +99,7 @@ export default function DoseResultsPage() {
           borderColor: pillarTheme.accentHex,
           backgroundColor: pillarTheme.accentHex + "33",
           pointBackgroundColor: pillarTheme.accentHex,
-          pointBorderColor: "#0F0F14",
+          pointBorderColor: "#0D0D18",
           pointRadius: 5,
           borderWidth: 2,
         },
@@ -126,8 +132,8 @@ export default function DoseResultsPage() {
       plugins: {
         legend: { display: false },
         tooltip: {
-          backgroundColor: "#1C1C26",
-          borderColor: "#2A2A38",
+          backgroundColor: "#18182A",
+          borderColor: "#252540",
           borderWidth: 1,
           titleColor: "#F8FAFC",
           bodyColor: "#94A3B8",
@@ -147,13 +153,20 @@ export default function DoseResultsPage() {
 
   return (
     <main
-      className="min-h-screen"
-      style={{ background: "#0F0F14" }}
+      className="relative min-h-screen"
+      style={{
+        background: `radial-gradient(ellipse 80% 50% at 50% 0%, ${pillarTheme.accentHex}22 0%, #0D0D18 55%)`,
+      }}
     >
+      {/* Snowfall particle layer — sits behind all content */}
+      <DoseSnowfall accentHex={pillarTheme.accentHex} count={55} />
       {/* ── Hero banner ─────────────────────────────────────── */}
       <div
         className="border-b px-4 py-8"
-        style={{ borderColor: "#2A2A38" }}
+        style={{
+          borderColor: pillarTheme.accentHex + "44",
+          background: `linear-gradient(180deg, ${pillarTheme.accentHex}10 0%, transparent 100%)`,
+        }}
       >
         <div className="mx-auto max-w-3xl space-y-4">
           <div className="text-xs font-bold uppercase tracking-widest text-slate-500">
@@ -172,12 +185,16 @@ export default function DoseResultsPage() {
           <div className="flex flex-wrap gap-3 pt-2">
             <div
               className="flex flex-col gap-1 rounded-xl px-4 py-3"
-              style={{ background: "#1C1C26", borderLeft: `3px solid ${pillarTheme.accentHex}` }}
+              style={{
+                background: "#18182A",
+                borderLeft: `3px solid ${pillarTheme.accentHex}`,
+                boxShadow: `inset 0 0 40px ${pillarTheme.accentHex}18`,
+              }}
             >
               <span className="text-xs text-slate-500">
                 {isSingleMode ? "Kết Quả" : "Điểm Mạnh"}
               </span>
-              <span className="text-lg font-bold" style={{ color: pillarTheme.accentHex }}>
+              <span className="text-lg font-bold" style={{ color: pillarTheme.accentHex, textShadow: `0 0 12px ${pillarTheme.accentHex}88` }}>
                 {sectionTitle(results.insights.pillar)}
               </span>
             </div>
@@ -185,10 +202,14 @@ export default function DoseResultsPage() {
             {!isSingleMode && (
               <div
                 className="flex flex-col gap-1 rounded-xl px-4 py-3"
-                style={{ background: "#1C1C26", borderLeft: `3px solid ${priorityTheme.accentHex}` }}
+                style={{
+                  background: "#18182A",
+                  borderLeft: `3px solid ${priorityTheme.accentHex}`,
+                  boxShadow: `inset 0 0 40px ${priorityTheme.accentHex}18`,
+                }}
               >
                 <span className="text-xs text-slate-500">Ưu Tiên Phát Triển</span>
-                <span className="text-lg font-bold" style={{ color: priorityTheme.accentHex }}>
+                <span className="text-lg font-bold" style={{ color: priorityTheme.accentHex, textShadow: `0 0 12px ${priorityTheme.accentHex}88` }}>
                   {sectionTitle(results.insights.priority)}
                 </span>
               </div>
@@ -203,7 +224,11 @@ export default function DoseResultsPage() {
         {activeSections.length > 1 && (
           <div
             className="rounded-2xl p-4"
-            style={{ background: "#1C1C26" }}
+            style={{
+              background: "#18182A",
+              border: `1px solid ${pillarTheme.accentHex}33`,
+              boxShadow: `0 0 24px ${pillarTheme.accentHex}22`,
+            }}
           >
             <div className="h-[300px] w-full sm:h-[360px]">
               <Radar data={data!} options={options} />
@@ -224,8 +249,9 @@ export default function DoseResultsPage() {
                 key={key}
                 className="rounded-2xl p-4"
                 style={{
-                  background: "#1C1C26",
-                  borderLeft: `3px solid ${t.accentHex}`,
+                  background: "#18182A",
+                  border: `1.5px solid ${t.accentHex}55`,
+                  boxShadow: `0 0 20px ${t.accentHex}22, inset 0 0 30px ${t.accentHex}08`,
                 }}
               >
                 <div className="mb-2 flex items-center justify-between gap-2">
@@ -238,7 +264,11 @@ export default function DoseResultsPage() {
                   <div className="flex items-center gap-1.5">
                     <span
                       className="text-sm font-bold"
-                      style={{ fontFamily: "var(--font-dose-mono, monospace)", color: t.accentHex }}
+                      style={{
+                        fontFamily: "var(--font-dose-mono, monospace)",
+                        color: t.accentHex,
+                        textShadow: `0 0 8px ${t.accentHex}88`,
+                      }}
                     >
                       {s.raw}/30
                     </span>
@@ -255,7 +285,11 @@ export default function DoseResultsPage() {
                       <span
                         key={p}
                         className="rounded px-2 py-0.5 text-[11px] font-medium"
-                        style={{ background: "#2A2A38", color: "#94A3B8" }}
+                        style={{
+                          background: t.accentHex + "22",
+                          color: t.accentHex + "DD",
+                          border: `1px solid ${t.accentHex}44`,
+                        }}
                       >
                         {p}
                       </span>
@@ -265,7 +299,7 @@ export default function DoseResultsPage() {
 
                 {/* Suggestions */}
                 {s.suggestions && (
-                  <ul className="space-y-0.5 text-xs text-slate-500">
+                  <ul className="space-y-0.5 text-xs text-slate-400">
                     {s.suggestions.map((sug: string) => (
                       <li key={sug} className="flex items-start gap-1.5">
                         <span style={{ color: t.accentHex }}>›</span>
@@ -284,7 +318,10 @@ export default function DoseResultsPage() {
           <Link
             href="/dose"
             className="w-full rounded-xl py-3 text-center text-sm font-semibold text-slate-300 transition-colors hover:text-white sm:w-auto sm:px-6"
-            style={{ background: "#2A2A38" }}
+            style={{
+              background: "#252540",
+              border: "1px solid #303060",
+            }}
           >
             ← Quay lại đầu
           </Link>
@@ -292,7 +329,10 @@ export default function DoseResultsPage() {
             type="button"
             onClick={reset}
             className="w-full rounded-xl py-3 text-center text-sm font-semibold text-white transition-opacity hover:opacity-80 sm:w-auto sm:px-6"
-            style={{ background: pillarTheme.accentHex }}
+            style={{
+              background: `linear-gradient(135deg, ${pillarTheme.accentHex}EE, ${pillarTheme.accentHex}AA)`,
+              boxShadow: `0 0 20px ${pillarTheme.accentHex}77`,
+            }}
           >
             Làm lại bài kiểm tra
           </button>

@@ -38,17 +38,23 @@ export function DoseModeSelector({ onSelect }: DoseModeSelectorProps) {
                         onClick={() => handleSelect(opt.key)}
                         className="w-full rounded-xl px-4 py-3.5 text-left transition-all duration-200 active:scale-[0.98] focus-visible:outline-none"
                         style={{
-                            background: isSelected ? opt.accentHex + "1A" : "#1C1C26",
-                            border: `2px solid ${isSelected ? opt.accentHex : "#2A2A38"}`,
+                            background: isSelected
+                                ? `linear-gradient(135deg, ${opt.accentHex}28, ${opt.accentHex}14)`
+                                : "#18182A",
+                            border: `2px solid ${isSelected ? opt.accentHex : "#252540"}`,
+                            boxShadow: isSelected
+                                ? `0 0 18px ${opt.accentHex}44, inset 0 0 24px ${opt.accentHex}10`
+                                : "none",
                         }}
                     >
                         <div className="flex items-center gap-3">
                             {/* Emoji icon */}
                             <div
-                                className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-lg text-lg"
+                                className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-lg text-lg transition-all duration-200"
                                 style={{
-                                    background: isSelected ? opt.accentHex + "33" : "#2A2A38",
-                                    border: `1px solid ${isSelected ? opt.accentHex + "66" : "transparent"}`,
+                                    background: isSelected ? opt.accentHex + "55" : "#252540",
+                                    border: `1px solid ${isSelected ? opt.accentHex + "88" : "transparent"}`,
+                                    boxShadow: isSelected ? `0 0 10px ${opt.accentHex}55` : "none",
                                 }}
                             >
                                 {opt.emoji}
@@ -58,7 +64,13 @@ export function DoseModeSelector({ onSelect }: DoseModeSelectorProps) {
                             <div className="flex flex-1 flex-col gap-0.5">
                                 <span
                                     className="text-sm font-bold leading-tight text-white"
-                                    style={isAll ? { background: "linear-gradient(90deg, #E040FB, #F4436C, #34D399, #818CF8)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" } : {}}
+                                    style={isAll ? {
+                                        background: "linear-gradient(90deg, #E040FB, #F4436C, #34D399, #818CF8, #E040FB)",
+                                        backgroundSize: "200% auto",
+                                        WebkitBackgroundClip: "text",
+                                        WebkitTextFillColor: "transparent",
+                                        animation: "dose-shimmer 3s linear infinite",
+                                    } : {}}
                                 >
                                     {opt.label}
                                 </span>
@@ -70,8 +82,12 @@ export function DoseModeSelector({ onSelect }: DoseModeSelectorProps) {
                             {/* Selected check indicator */}
                             {isSelected && (
                                 <div
-                                    className="flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full text-[10px]"
-                                    style={{ background: opt.accentHex, color: "#fff" }}
+                                    className="flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full text-[10px] font-bold"
+                                    style={{
+                                        background: `linear-gradient(135deg, ${opt.accentHex}, ${opt.accentHex}99)`,
+                                        boxShadow: `0 0 8px ${opt.accentHex}77`,
+                                        color: "#fff",
+                                    }}
                                 >
                                     ✓
                                 </div>

@@ -23,24 +23,35 @@ export default function DoseIntroPage() {
     router.push(`/dose/${firstSection}/1`);
   };
 
+  const activeColor = selectedMode ? (LETTER_COLORS[selectedMode] ?? "#F59E0B") : null;
+
   return (
     <main
       className="flex min-h-screen flex-col items-center justify-center p-6"
-      style={{ background: "#0F0F14" }}
+      style={{
+        background: "radial-gradient(ellipse 80% 60% at 50% 0%, #1a0a2e 0%, #0D0D18 55%, #0D0D18 100%)",
+      }}
     >
       <div className="flex w-full max-w-sm flex-col items-center gap-8">
 
-        {/* D·O·S·E wordmark — colour-blocked letters */}
+        {/* D·O·S·E wordmark — colour-blocked letters with glow */}
         <div className="flex gap-3">
-          {DOSE_SECTIONS.map((s) => (
-            <div
-              key={s.key}
-              className="flex h-16 w-16 items-center justify-center rounded-xl text-2xl font-bold text-white"
-              style={{ background: LETTER_COLORS[s.key] }}
-            >
-              {s.key[0].toUpperCase()}
-            </div>
-          ))}
+          {DOSE_SECTIONS.map((s) => {
+            const color = LETTER_COLORS[s.key];
+            return (
+              <div
+                key={s.key}
+                className="dose-float flex h-20 w-20 items-center justify-center rounded-2xl text-3xl font-bold text-white"
+                style={{
+                  background: `linear-gradient(135deg, ${color}DD, ${color}99)`,
+                  boxShadow: `0 0 28px ${color}99, 0 0 6px ${color}55 inset`,
+                  animationDelay: `${DOSE_SECTIONS.indexOf(s) * 0.3}s`,
+                }}
+              >
+                {s.key[0].toUpperCase()}
+              </div>
+            );
+          })}
         </div>
 
         {/* Heading */}
@@ -51,7 +62,7 @@ export default function DoseIntroPage() {
           >
             Khám Phá D.O.S.E Của Bạn
           </h1>
-          <p className="text-base text-slate-400">
+          <p className="text-base text-slate-300">
             Kiểm tra thần kinh học trong vài phút — không cần bằng cấp khoa học.
           </p>
         </div>
@@ -65,10 +76,11 @@ export default function DoseIntroPage() {
           onClick={handleStart}
           disabled={!selectedMode}
           className="w-full rounded-xl py-4 text-center text-base font-semibold text-white transition-all duration-200 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-30"
-          style={{
-            background: selectedMode
-              ? (LETTER_COLORS[selectedMode] ?? "#F59E0B")
-              : "#2A2A38",
+          style={activeColor ? {
+            background: `linear-gradient(135deg, ${activeColor}DD, ${activeColor}99)`,
+            boxShadow: `0 0 24px ${activeColor}77, 0 2px 8px ${activeColor}44`,
+          } : {
+            background: "#252540",
           }}
         >
           {selectedMode ? "Bắt đầu →" : "Chọn hành trình trước nhé"}

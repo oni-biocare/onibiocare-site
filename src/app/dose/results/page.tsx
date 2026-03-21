@@ -1,347 +1,391 @@
 "use client";
 
 import { DOSE_SECTIONS } from "@/lib/dose/questions";
-import { computeDoseResults, doseRadarChartData } from "@/lib/dose/scoring";
+import { computeDoseResults } from "@/lib/dose/scoring";
 import { useDose } from "@/lib/dose/store";
-import { DOSE_SECTION_ORDER } from "@/lib/dose/constants";
-import { DOSE_THEMES } from "@/lib/dose/theme";
 import type { DoseSectionKey } from "@/lib/dose/types";
 import Link from "next/link";
-import { DoseSnowfall } from "./DoseSnowfall";
-import {
-  Chart as ChartJS,
-  Filler,
-  Legend,
-  LineElement,
-  PointElement,
-  RadialLinearScale,
-  Tooltip,
-} from "chart.js";
-import { Radar } from "react-chartjs-2";
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 
-ChartJS.register(
-  RadialLinearScale,
-  PointElement,
-  LineElement,
-  Filler,
-  Tooltip,
-  Legend,
-);
+/* ── Cute pastel palette for results ────────────────────────── */
+const CUTE_RESULT_THEMES: Record<
+    DoseSectionKey,
+    { accent: string; accentBg: string; accentDark: string; emoji: string; label: string }
+> = {
+    dopamine: {
+        accent: "#F9A8D4",
+        accentBg: "#FCE7F3",
+        accentDark: "#DB2777",
+        emoji: "❤️",
+        label: "Dopamine",
+    },
+    oxytocin: {
+        accent: "#FDBA74",
+        accentBg: "#FEF3C7",
+        accentDark: "#D97706",
+        emoji: "🧡",
+        label: "Oxytocin",
+    },
+    serotonin: {
+        accent: "#6EE7B7",
+        accentBg: "#D1FAE5",
+        accentDark: "#059669",
+        emoji: "💚",
+        label: "Serotonin",
+    },
+    endorphins: {
+        accent: "#C4B5FD",
+        accentBg: "#EDE9FE",
+        accentDark: "#7C3AED",
+        emoji: "💜",
+        label: "Endorphins",
+    },
+};
 
-function sectionTitle(section: DoseSectionKey) {
-  const found = DOSE_SECTIONS.find((s) => s.key === section);
-  return found?.title ?? section;
-}
-
-function BandBadge({ band, accentHex }: { band: string; accentHex: string }) {
-  const BAND_VI: Record<string, string> = {
+const BAND_LABELS: Record<string, string> = {
     "Very Low": "Rất thấp",
     "Low": "Thấp",
     "Moderate": "Trung bình",
     "High": "Cao",
     "Very High": "Rất cao",
-  };
-  return (
-    <span
-      className="inline-block rounded px-2 py-0.5 text-[10px] font-bold uppercase tracking-widest"
-      style={{
-        background: accentHex + "44",
-        color: accentHex,
-        border: `1px solid ${accentHex}66`,
-        boxShadow: `0 0 6px ${accentHex}33`,
-      }}
-    >
-      {BAND_VI[band] ?? band}
-    </span>
-  );
+};
+
+function sectionTitle(section: DoseSectionKey) {
+    const found = DOSE_SECTIONS.find((s) => s.key === section);
+    return found?.title ?? section;
 }
 
-export default function DoseResultsPage() {
-  const router = useRouter();
-  const { answers, reset, activeSections } = useDose();
+export default function CuteDoseResultsPage() {
+    const router = useRouter();
+    const { answers, reset, activeSections, userName, userPhone, selectedMode } = useDose();
+    const [sentToast, setSentToast] = useState(false);
+    const hasSent = useRef(false);
 
-  // Require all 6 answers per active section
-  const requiredCount = activeSections.length * 6;
-  const hasAllAnswers = useMemo(
-    () => Object.values(answers).filter((v) => v !== undefined).length === requiredCount,
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [answers, requiredCount],
-  );
+    const requiredCount = activeSections.length * 6;
+    const hasAllAnswers = useMemo(
+        () => Object.values(answers).filter((v) => v !== undefined).length === requiredCount,
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+        [answers, requiredCount],
+    );
 
-  useEffect(() => {
-    if (!hasAllAnswers) router.replace("/dose");
-  }, [hasAllAnswers, router]);
+    useEffect(() => {
+        if (!hasAllAnswers) router.replace("/dose");
+    }, [hasAllAnswers, router]);
 
-  const results = useMemo(
-    () => (hasAllAnswers ? computeDoseResults(answers, activeSections) : null),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [answers, hasAllAnswers],
-  );
+    const results = useMemo(
+        () => (hasAllAnswers ? computeDoseResults(answers, activeSections) : null),
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+        [answers, hasAllAnswers],
+    );
 
-  const chart = useMemo(
-    () => (results ? doseRadarChartData(results.scores) : null),
-    [results],
-  );
+    // ── Send results to Telegram once ──────────────────────────
+    useEffect(() => {
+        if (!hasAllAnswers || !results || hasSent.current) return;
+        hasSent.current = true;
 
-  const pillarTheme = results ? DOSE_THEMES[results.insights.pillar] : null;
-  const priorityTheme = results ? DOSE_THEMES[results.insights.priority] : null;
+        fetch("/api/dose-result", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                name: userName || "(Ẩn danh)",
+                phone: userPhone || "—",
+                mode: selectedMode ?? "all",
+                answers,
+                scores: results.scores,
+                insights: results.insights,
+                activeSections,
+            }),
+        })
+            .then((r) => { if (r.ok) setSentToast(true); })
+            .catch(() => { /* silent */ });
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [hasAllAnswers, results]);
 
-  const data = useMemo(() => {
-    if (!chart || !pillarTheme) return null;
-    return {
-      labels: chart.labels,
-      datasets: [
-        {
-          label: "Hồ sơ D.O.S.E của bạn",
-          data: chart.data,
-          borderColor: pillarTheme.accentHex,
-          backgroundColor: pillarTheme.accentHex + "33",
-          pointBackgroundColor: pillarTheme.accentHex,
-          pointBorderColor: "#0D0D18",
-          pointRadius: 5,
-          borderWidth: 2,
-        },
-      ],
-    };
-  }, [chart, pillarTheme]);
+    if (!hasAllAnswers || !results) return null;
 
-  const options = useMemo(
-    () => ({
-      responsive: true,
-      maintainAspectRatio: false,
-      scales: {
-        r: {
-          min: 6,
-          max: 30,
-          ticks: {
-            stepSize: 6,
-            color: "#475569",
-            backdropColor: "transparent",
-            font: { size: 10 },
-          },
-          grid: { color: "rgba(255,255,255,0.07)" },
-          angleLines: { color: "rgba(255,255,255,0.07)" },
-          pointLabels: {
-            color: "#94A3B8",
-            font: { size: 12, weight: "bold" as const },
-          },
-        },
-      },
-      plugins: {
-        legend: { display: false },
-        tooltip: {
-          backgroundColor: "#18182A",
-          borderColor: "#252540",
-          borderWidth: 1,
-          titleColor: "#F8FAFC",
-          bodyColor: "#94A3B8",
-        },
-      },
-    }),
-    [],
-  );
+    const pillarTheme = CUTE_RESULT_THEMES[results.insights.pillar];
+    const priorityTheme = CUTE_RESULT_THEMES[results.insights.priority];
 
-  const isSingleMode = activeSections.length === 1;
-
-  if (!hasAllAnswers || !results || !pillarTheme || !priorityTheme) {
-    return null;
-  }
-  // Radar chart data only required for multi-section mode
-  if (!isSingleMode && !data) return null;
-
-  return (
-    <main
-      className="relative min-h-screen"
-      style={{
-        background: `radial-gradient(ellipse 80% 50% at 50% 0%, ${pillarTheme.accentHex}22 0%, #0D0D18 55%)`,
-      }}
-    >
-      {/* Snowfall particle layer — sits behind all content */}
-      <DoseSnowfall accentHex={pillarTheme.accentHex} count={55} />
-      {/* ── Hero banner ─────────────────────────────────────── */}
-      <div
-        className="border-b px-4 py-8"
-        style={{
-          borderColor: pillarTheme.accentHex + "44",
-          background: `linear-gradient(180deg, ${pillarTheme.accentHex}10 0%, transparent 100%)`,
-        }}
-      >
-        <div className="mx-auto max-w-3xl space-y-4">
-          <div className="text-xs font-bold uppercase tracking-widest text-slate-500">
-            {isSingleMode
-              ? `Kết Quả ${sectionTitle(activeSections[0])}`
-              : "Hồ Sơ D.O.S.E Của Bạn"}
-          </div>
-          <h1
-            className="text-3xl font-bold text-white sm:text-4xl"
-            style={{ fontFamily: "var(--font-dose-grotesk, inherit)" }}
-          >
-            {results.insights.balance}
-          </h1>
-
-          {/* Pillar + Priority stats */}
-          <div className="flex flex-wrap gap-3 pt-2">
+    return (
+        <main
+            className="relative min-h-screen overflow-hidden"
+            style={{ background: "#FDF8F4" }}
+        >
+            {/* ── Top logo bar ─────────────────────────────────────── */}
             <div
-              className="flex flex-col gap-1 rounded-xl px-4 py-3"
-              style={{
-                background: "#18182A",
-                borderLeft: `3px solid ${pillarTheme.accentHex}`,
-                boxShadow: `inset 0 0 40px ${pillarTheme.accentHex}18`,
-              }}
+                className="sticky top-0 z-10 flex items-center px-4 py-3"
+                style={{
+                    background: "rgba(253,248,244,0.92)",
+                    backdropFilter: "blur(8px)",
+                    borderBottom: "1px solid rgba(196,181,253,0.25)",
+                }}
             >
-              <span className="text-xs text-slate-500">
-                {isSingleMode ? "Kết Quả" : "Điểm Mạnh"}
-              </span>
-              <span className="text-lg font-bold" style={{ color: pillarTheme.accentHex, textShadow: `0 0 12px ${pillarTheme.accentHex}88` }}>
-                {sectionTitle(results.insights.pillar)}
-              </span>
-            </div>
-            {/* Only show the Priority box in multi-section / Tổng hợp mode */}
-            {!isSingleMode && (
-              <div
-                className="flex flex-col gap-1 rounded-xl px-4 py-3"
-                style={{
-                  background: "#18182A",
-                  borderLeft: `3px solid ${priorityTheme.accentHex}`,
-                  boxShadow: `inset 0 0 40px ${priorityTheme.accentHex}18`,
-                }}
-              >
-                <span className="text-xs text-slate-500">Ưu Tiên Phát Triển</span>
-                <span className="text-lg font-bold" style={{ color: priorityTheme.accentHex, textShadow: `0 0 12px ${priorityTheme.accentHex}88` }}>
-                  {sectionTitle(results.insights.priority)}
-                </span>
-              </div>
-            )}
-          </div>
-        </div>
-      </div>
-
-      <div className="mx-auto max-w-3xl space-y-6 p-4 pb-12">
-
-        {/* ── Radar chart — only shown for multi-section modes ──── */}
-        {activeSections.length > 1 && (
-          <div
-            className="rounded-2xl p-4"
-            style={{
-              background: "#18182A",
-              border: `1px solid ${pillarTheme.accentHex}33`,
-              boxShadow: `0 0 24px ${pillarTheme.accentHex}22`,
-            }}
-          >
-            <div className="h-[300px] w-full sm:h-[360px]">
-              <Radar data={data!} options={options} />
-            </div>
-            <p className="mt-2 text-center text-xs text-slate-600">
-              Điểm từ 6–30 mỗi lĩnh vực (tổng của 6 câu hỏi)
-            </p>
-          </div>
-        )}
-
-        {/* ── Section score cards 2×2 ─────────────────────────── */}
-        <div className="grid gap-3 sm:grid-cols-2">
-          {activeSections.map((key: DoseSectionKey) => {
-            const s = results.scores[key];
-            const t = DOSE_THEMES[key];
-            return (
-              <div
-                key={key}
-                className="rounded-2xl p-4"
-                style={{
-                  background: "#18182A",
-                  border: `1.5px solid ${t.accentHex}55`,
-                  boxShadow: `0 0 20px ${t.accentHex}22, inset 0 0 30px ${t.accentHex}08`,
-                }}
-              >
-                <div className="mb-2 flex items-center justify-between gap-2">
-                  <span
-                    className="text-base font-bold text-white"
-                    style={{ fontFamily: "var(--font-dose-grotesk, inherit)" }}
-                  >
-                    {sectionTitle(key)}
-                  </span>
-                  <div className="flex items-center gap-1.5">
-                    <span
-                      className="text-sm font-bold"
-                      style={{
-                        fontFamily: "var(--font-dose-mono, monospace)",
-                        color: t.accentHex,
-                        textShadow: `0 0 8px ${t.accentHex}88`,
-                      }}
-                    >
-                      {s.raw}/30
+                <a href="/" className="flex items-center gap-2 transition-opacity hover:opacity-70">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src="/onibiocare-logo.png" alt="Oni Biocare" width={24} height={24} className="rounded-md" />
+                    <span className="text-sm font-bold" style={{ color: "#374151", fontFamily: "var(--font-cute-nunito, inherit)" }}>
+                        Oni Biocare
                     </span>
-                    <BandBadge band={s.band} accentHex={t.accentHex} />
-                  </div>
+                </a>
+            </div>
+
+            {/* Pastel blob decorations */}
+            <div
+                className="cute-blob-drift pointer-events-none absolute -right-20 -top-20 h-72 w-72 rounded-full opacity-60"
+                style={{
+                    background: `radial-gradient(circle, ${pillarTheme.accent}88 0%, transparent 70%)`,
+                    filter: "blur(48px)",
+                }}
+            />
+            <div
+                className="cute-blob-drift pointer-events-none absolute -bottom-20 -left-20 h-72 w-72 rounded-full opacity-40"
+                style={{
+                    background: `radial-gradient(circle, ${priorityTheme.accent}66 0%, transparent 70%)`,
+                    filter: "blur(48px)",
+                    animationDelay: "3s",
+                }}
+            />
+
+            <div className="relative z-10 mx-auto max-w-md px-5 pb-16 pt-8">
+
+                {/* ── Header ─────────────────────────────────────────── */}
+                <div className="mb-8 text-center">
+                    <div
+                        className="mb-3 inline-flex items-center gap-1.5 rounded-full px-4 py-1.5 text-sm font-semibold"
+                        style={{ background: pillarTheme.accentBg, color: pillarTheme.accentDark }}
+                    >
+                        <span>✦</span>
+                        <span style={{ fontFamily: "var(--font-cute-quicksand, inherit)" }}>
+                            Hồ sơ D.O.S.E của bạn
+                        </span>
+                    </div>
+                    <h1
+                        className="text-2xl font-black leading-snug"
+                        style={{
+                            color: "#111827",
+                            fontFamily: "var(--font-cute-nunito, inherit)",
+                        }}
+                    >
+                        {results.insights.balance}
+                    </h1>
                 </div>
 
-                <p className="mb-3 text-sm text-slate-300">{s.state}</p>
-
-                {/* Pattern chips — skip empty placeholders */}
-                {s.patterns.some((p: string) => p.length > 0) && (
-                  <div className="mb-3 flex flex-wrap gap-1.5">
-                    {s.patterns.filter((p: string) => p.length > 0).map((p: string) => (
-                      <span
-                        key={p}
-                        className="rounded px-2 py-0.5 text-[11px] font-medium"
+                {/* ── Pillar + Priority highlight cards ──────────────── */}
+                <div className="mb-6 grid grid-cols-2 gap-3">
+                    <div
+                        className="rounded-2xl p-4 text-center"
                         style={{
-                          background: t.accentHex + "22",
-                          color: t.accentHex + "DD",
-                          border: `1px solid ${t.accentHex}44`,
+                            background: pillarTheme.accentBg,
+                            border: `2px solid ${pillarTheme.accent}`,
                         }}
-                      >
-                        {p}
-                      </span>
-                    ))}
-                  </div>
-                )}
+                    >
+                        <div className="mb-1 text-2xl">{pillarTheme.emoji}</div>
+                        <div
+                            className="text-xs font-semibold uppercase tracking-wide"
+                            style={{ color: pillarTheme.accentDark, fontFamily: "var(--font-cute-quicksand, inherit)" }}
+                        >
+                            Điểm mạnh
+                        </div>
+                        <div
+                            className="mt-0.5 text-base font-black"
+                            style={{ color: pillarTheme.accentDark, fontFamily: "var(--font-cute-nunito, inherit)" }}
+                        >
+                            {sectionTitle(results.insights.pillar)}
+                        </div>
+                    </div>
 
-                {/* Suggestions */}
-                {s.suggestions && (
-                  <ul className="space-y-0.5 text-xs text-slate-400">
-                    {s.suggestions.map((sug: string) => (
-                      <li key={sug} className="flex items-start gap-1.5">
-                        <span style={{ color: t.accentHex }}>›</span>
-                        {sug}
-                      </li>
-                    ))}
-                  </ul>
-                )}
-              </div>
-            );
-          })}
-        </div>
+                    {activeSections.length > 1 && (
+                        <div
+                            className="rounded-2xl p-4 text-center"
+                            style={{
+                                background: priorityTheme.accentBg,
+                                border: `2px solid ${priorityTheme.accent}`,
+                            }}
+                        >
+                            <div className="mb-1 text-2xl">{priorityTheme.emoji}</div>
+                            <div
+                                className="text-xs font-semibold uppercase tracking-wide"
+                                style={{ color: priorityTheme.accentDark, fontFamily: "var(--font-cute-quicksand, inherit)" }}
+                            >
+                                Ưu tiên phát triển
+                            </div>
+                            <div
+                                className="mt-0.5 text-base font-black"
+                                style={{ color: priorityTheme.accentDark, fontFamily: "var(--font-cute-nunito, inherit)" }}
+                            >
+                                {sectionTitle(results.insights.priority)}
+                            </div>
+                        </div>
+                    )}
+                </div>
 
-        {/* ── CTAs ────────────────────────────────────────────── */}
-        <div className="flex flex-col gap-3 pt-2 sm:flex-row">
-          <Link
-            href="/dose"
-            className="w-full rounded-xl py-3 text-center text-sm font-semibold text-slate-300 transition-colors hover:text-white sm:w-auto sm:px-6"
-            style={{
-              background: "#252540",
-              border: "1px solid #303060",
-            }}
-          >
-            ← Quay lại đầu
-          </Link>
-          <button
-            type="button"
-            onClick={reset}
-            className="w-full rounded-xl py-3 text-center text-sm font-semibold text-white transition-opacity hover:opacity-80 sm:w-auto sm:px-6"
-            style={{
-              background: `linear-gradient(135deg, ${pillarTheme.accentHex}EE, ${pillarTheme.accentHex}AA)`,
-              boxShadow: `0 0 20px ${pillarTheme.accentHex}77`,
-            }}
-          >
-            Làm lại bài kiểm tra
-          </button>
-        </div>
+                {/* ── Score cards ────────────────────────────────────── */}
+                <div className="space-y-3">
+                    {activeSections.map((key: DoseSectionKey) => {
+                        const s = results.scores[key];
+                        const t = CUTE_RESULT_THEMES[key];
+                        const pct = Math.round(((s.raw - 6) / 24) * 100);
 
-        <p className="text-xs text-slate-600">
-          Công cụ này chỉ dành cho tự chiêm nghiệm và hướng dẫn, không phải chẩn đoán y tế.
-        </p>
-      </div>
-    </main>
-  );
+                        return (
+                            <div
+                                key={key}
+                                className="rounded-2xl p-4"
+                                style={{
+                                    background: "#FFFFFF",
+                                    border: `1.5px solid ${t.accent}`,
+                                    boxShadow: `0 4px 16px ${t.accent}33`,
+                                }}
+                            >
+                                {/* Header row */}
+                                <div className="mb-3 flex items-center justify-between">
+                                    <div className="flex items-center gap-2">
+                                        <span className="text-xl">{t.emoji}</span>
+                                        <span
+                                            className="text-base font-black"
+                                            style={{ color: "#111827", fontFamily: "var(--font-cute-nunito, inherit)" }}
+                                        >
+                                            {t.label}
+                                        </span>
+                                    </div>
+                                    <div className="flex items-center gap-2">
+                                        <span
+                                            className="text-sm font-bold"
+                                            style={{ color: t.accentDark, fontFamily: "var(--font-cute-nunito, inherit)" }}
+                                        >
+                                            {s.raw}/30
+                                        </span>
+                                        <span
+                                            className="rounded-full px-2.5 py-0.5 text-[10px] font-bold"
+                                            style={{
+                                                background: t.accentBg,
+                                                color: t.accentDark,
+                                                fontFamily: "var(--font-cute-quicksand, inherit)",
+                                            }}
+                                        >
+                                            {BAND_LABELS[s.band] ?? s.band}
+                                        </span>
+                                    </div>
+                                </div>
+
+                                {/* Progress bar */}
+                                <div
+                                    className="mb-3 h-2.5 w-full overflow-hidden rounded-full"
+                                    style={{ background: t.accentBg }}
+                                >
+                                    <div
+                                        className="h-full rounded-full transition-all duration-700"
+                                        style={{
+                                            width: `${Math.max(pct, 4)}%`,
+                                            background: `linear-gradient(90deg, ${t.accent}, ${t.accentDark})`,
+                                        }}
+                                    />
+                                </div>
+
+                                {/* State description */}
+                                <p
+                                    className="mb-2 text-sm"
+                                    style={{ color: "#374151", fontFamily: "var(--font-cute-quicksand, inherit)" }}
+                                >
+                                    {s.state}
+                                </p>
+
+                                {/* Pattern chips */}
+                                {s.patterns.some((p: string) => p.length > 0) && (
+                                    <div className="mb-2 flex flex-wrap gap-1.5">
+                                        {s.patterns
+                                            .filter((p: string) => p.length > 0)
+                                            .map((p: string) => (
+                                                <span
+                                                    key={p}
+                                                    className="rounded-full px-2.5 py-0.5 text-[11px] font-medium"
+                                                    style={{
+                                                        background: t.accentBg,
+                                                        color: t.accentDark,
+                                                        fontFamily: "var(--font-cute-quicksand, inherit)",
+                                                    }}
+                                                >
+                                                    {p}
+                                                </span>
+                                            ))}
+                                    </div>
+                                )}
+
+                                {/* Suggestions */}
+                                {s.suggestions && s.suggestions.length > 0 && (
+                                    <ul className="space-y-0.5">
+                                        {s.suggestions.map((sug: string) => (
+                                            <li
+                                                key={sug}
+                                                className="flex items-start gap-1.5 text-xs"
+                                                style={{ color: "#6B7280", fontFamily: "var(--font-cute-quicksand, inherit)" }}
+                                            >
+                                                <span style={{ color: t.accentDark, flexShrink: 0 }}>›</span>
+                                                {sug}
+                                            </li>
+                                        ))}
+                                    </ul>
+                                )}
+                            </div>
+                        );
+                    })}
+                </div>
+
+                {/* ── CTAs ────────────────────────────────────────────── */}
+                <div className="mt-6 flex flex-col gap-3">
+                    <button
+                        type="button"
+                        onClick={() => {
+                            reset();
+                            void (typeof window !== "undefined" && (window.location.href = "/dose"));
+                        }}
+                        className="w-full rounded-full py-3.5 text-base font-bold text-white transition-all duration-200 hover:opacity-90 active:scale-[0.97]"
+                        style={{
+                            background: `linear-gradient(135deg, ${pillarTheme.accent}, ${pillarTheme.accentDark})`,
+                            boxShadow: `0 6px 20px ${pillarTheme.accent}66`,
+                            fontFamily: "var(--font-cute-nunito, inherit)",
+                        }}
+                    >
+                        Làm lại bài kiểm tra ✨
+                    </button>
+
+                    <Link
+                        href="/dose"
+                        className="w-full rounded-full border-2 py-3 text-center text-sm font-bold transition-all duration-200 hover:opacity-80"
+                        style={{
+                            borderColor: "#E5E7EB",
+                            color: "#6B7280",
+                            background: "#FFFFFF",
+                            fontFamily: "var(--font-cute-quicksand, inherit)",
+                        }}
+                    >
+                        ← Quay lại đầu
+                    </Link>
+                </div>
+
+                <p
+                    className="mt-6 text-center text-[10px] leading-relaxed"
+                    style={{ color: "#9CA3AF" }}
+                >
+                    Chỉ dành cho tự chiêm nghiệm — không phải chẩn đoán y tế. Câu trả lời của bạn hoàn toàn riêng tư.
+                </p>
+            </div>
+
+            {/* ── Telegram sent toast ──────────────────────────────── */}
+            {sentToast && (
+                <div
+                    className="fixed bottom-6 left-1/2 z-50 flex -translate-x-1/2 items-center gap-2 rounded-full px-5 py-2.5 text-sm font-semibold text-white shadow-lg"
+                    style={{
+                        background: "linear-gradient(135deg, #6EE7B7, #059669)",
+                        boxShadow: "0 4px 20px rgba(110,231,183,0.45)",
+                        fontFamily: "var(--font-cute-quicksand, inherit)",
+                        animation: "cute-pop 0.3s ease-out",
+                    }}
+                >
+                    <span>✓</span>
+                    <span>Kết quả đã gửi thành công!</span>
+                </div>
+            )}
+        </main>
+    );
 }

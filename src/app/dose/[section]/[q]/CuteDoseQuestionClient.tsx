@@ -116,18 +116,18 @@ export default function CuteDoseQuestionClient({
 
     // ── Navigation hrefs ──────────────────────────────────────
     const prevHref = useMemo(() => {
-        if (qIndex > 1) return `/cute/dose/${sectionKey}/${qIndex - 1}`;
+        if (qIndex > 1) return `/dose/${sectionKey}/${qIndex - 1}`;
         const pos = activeSections.indexOf(sectionKey);
-        if (pos > 0) return `/cute/dose/${activeSections[pos - 1]}/6`;
-        return `/cute/dose`;
+        if (pos > 0) return `/dose/${activeSections[pos - 1]}/6`;
+        return `/dose`;
     }, [qIndex, sectionKey, activeSections]);
 
     const nextHref = useMemo(() => {
-        if (qIndex < 6) return `/cute/dose/${sectionKey}/${qIndex + 1}`;
+        if (qIndex < 6) return `/dose/${sectionKey}/${qIndex + 1}`;
         const pos = activeSections.indexOf(sectionKey);
         if (pos < activeSections.length - 1)
-            return `/cute/dose/${activeSections[pos + 1]}/1`;
-        return `/cute/dose/results`;
+            return `/dose/${activeSections[pos + 1]}/1`;
+        return `/dose/results`;
     }, [qIndex, sectionKey, activeSections]);
 
     const [showInterstitial, setShowInterstitial] = useState(false);

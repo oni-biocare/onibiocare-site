@@ -13,6 +13,10 @@ type DoseState = {
   setMode: (mode: DoseModeKey) => void;
   /** Ordered list of sections active for the current mode */
   activeSections: DoseSectionKey[];
+  /** User info collected before starting the test */
+  userName: string;
+  userPhone: string;
+  setUserInfo: (name: string, phone: string) => void;
 };
 
 const DoseContext = createContext<DoseState | null>(null);
@@ -20,6 +24,8 @@ const DoseContext = createContext<DoseState | null>(null);
 export function DoseProvider({ children }: { children: React.ReactNode }) {
   const [answers, setAnswers] = useState<DoseAnswers>({});
   const [selectedMode, setSelectedMode] = useState<DoseModeKey | null>(null);
+  const [userName, setUserName] = useState("");
+  const [userPhone, setUserPhone] = useState("");
 
   const activeSections = useMemo<DoseSectionKey[]>(
     () => (selectedMode ? DOSE_MODE_SECTIONS[selectedMode] : DOSE_SECTION_ORDER),
@@ -34,6 +40,8 @@ export function DoseProvider({ children }: { children: React.ReactNode }) {
       reset: () => {
         setAnswers({});
         setSelectedMode(null);
+        setUserName("");
+        setUserPhone("");
       },
       selectedMode,
       setMode: (mode) => {
@@ -41,8 +49,14 @@ export function DoseProvider({ children }: { children: React.ReactNode }) {
         setAnswers({});
       },
       activeSections,
+      userName,
+      userPhone,
+      setUserInfo: (name, phone) => {
+        setUserName(name);
+        setUserPhone(phone);
+      },
     }),
-    [answers, selectedMode, activeSections],
+    [answers, selectedMode, activeSections, userName, userPhone],
   );
 
   return <DoseContext.Provider value={value}>{children}</DoseContext.Provider>;

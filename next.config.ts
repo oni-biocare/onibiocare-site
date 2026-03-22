@@ -18,8 +18,7 @@ let basePath = '';
 // }
 
 const nextConfig = {
-  output: 'export',
-    // Configure images for static export
+    // Configure images
     images: {
       unoptimized: true,
       domains: [

@@ -20,7 +20,7 @@ let basePath = '';
 const nextConfig = {
     // Configure images
     images: {
-      unoptimized: true,
+      unoptimized: true,  
       domains: [
         'localhost', 
         'localhost:3000', 

@@ -19,8 +19,6 @@ let basePath = '';
 // }
 
 const nextConfig = {
-  output: 'export',
-  
   // Ignore TypeScript errors during build
   typescript: {
     ignoreBuildErrors: true,

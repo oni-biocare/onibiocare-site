@@ -131,7 +131,7 @@ export default function CuteDoseIntroPage() {
                                 style={{ color, animationDelay: `${colorIdx * 0.25}s` }}
                             >
                                 {char}
-                            </span>
+                            </span> 
                         );
                     })}
                 </div>

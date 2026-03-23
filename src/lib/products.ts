@@ -20,6 +20,7 @@ export type Product = {
   gallery?: string[];
   order?: number;
   shopeeUrl?: string;
+  doseHormones?: string[];
 };
 
 export type ProductCategory = {
@@ -53,6 +54,7 @@ export async function getProductData(id: string): Promise<Product> {
       gallery?: string[];
       order?: number;
       shopeeUrl?: string;
+      doseHormones?: string[];
     })
   };
 }
@@ -94,6 +96,7 @@ export function getSortedProductsData(): Omit<Product, 'content'>[] {
         gallery?: string[];
         order?: number;
         shopeeUrl?: string;
+        doseHormones?: string[];
       })
     };
   });

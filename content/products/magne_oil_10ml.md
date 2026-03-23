@@ -18,6 +18,9 @@ gallery:
   -  "/images/products/magne_10ml_xit_6.png"
 shopeeUrl: "https://shopee.vn/Dầu-Xoa-Bóp-Xương-Khớp-Dầu-Massage-Giảm-Đau-Khớp-Cổ-Vai-Gáy-Toàn-Thân-100-Dầu-Magne-Dạng-Xịt-10ml-THIETBISPAONI-i.1496144810.27531717878"
 order: 1
+doseHormones:
+  - endorphins
+  - serotonin
 ---
 
 # 🚨 CUỐI CÙNG! Giải Pháp Giảm Đau Xương Khớp Chỉ Trong 3 PHÚT - Không Cần Uống Thuốc! 🚨

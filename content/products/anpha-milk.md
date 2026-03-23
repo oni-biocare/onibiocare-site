@@ -18,6 +18,9 @@ gallery:
   -  "/images/products/anpha_6.png"
 shopeeUrl: "https://shopee.vn/Sữa-Tiểu-Đường-Sữa-Xương-Khớp-Ổn-Định-Đường-Huyết-Cho-Người-Lớn-Bổ-Sung-Canxi-Nano-Dạng-Bột-Anpha-900gr-THIETBISPAONI-i.1496144810.27731718765"
 order: 3
+doseHormones:
+  - oxytocin
+  - serotonin
 ---
 
 # 🚨 CUỐI CÙNG! Giải Pháp An Toàn Cho Người Tiểu Đường Mà Không Cần Lo Lắng Về Đường Huyết Tăng Vọt

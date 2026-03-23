@@ -18,6 +18,9 @@ gallery:
   -  "/images/products/magne_oil_6.png"
 shopeeUrl: "https://shopee.vn/Dầu-Massage-Dầu-Xoa-Bóp-Xương-Khớp-Giảm-Đau-Khớp-Đầu-Gối-Vai-Cổ-Eo-Chân-100-Magne-100ml-Dạng-Xịt-THIETBISPAONI-i.1496144810.27331718113"
 order: 5
+doseHormones:
+  - endorphins
+  - serotonin
 ---
 ## 🔥 TẠM BIỆT ĐAU NHỨC – HỒI SINH KHỚP XƯƠNG CHỈ TRONG GIÂY LÁT!
 

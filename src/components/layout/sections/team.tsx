@@ -1,6 +1,3 @@
-import GithubIcon from "@/components/icons/github-icon";
-import LinkedInIcon from "@/components/icons/linkedin-icon";
-import XIcon from "@/components/icons/x-icon";
 import {
   Card,
   CardContent,
@@ -8,7 +5,9 @@ import {
   CardTitle,
   CardFooter,
 } from "@/components/ui/card";
-import { Facebook, FacebookIcon, YoutubeIcon } from "lucide-react";
+import { Facebook, YoutubeIcon } from "lucide-react";
+import LinkedInIcon from "@/components/icons/linkedin-icon";
+import GithubIcon from "@/components/icons/github-icon";
 import OniImage from "@/components/ui/oni-image";
 import Link from "next/link";
 
@@ -44,8 +43,7 @@ export const TeamSection = () => {
       ],
     },
     {
-      imageUrl:
-        "/img_van_tan.jpeg",
+      imageUrl: "/img_van_tan.jpeg",
       firstName: "Nguyễn",
       lastName: "Văn Tân",
       positions: ["Hơn 5 năm xây dựng và phát triển sản phẩm công nghệ"],
@@ -65,15 +63,14 @@ export const TeamSection = () => {
       ],
     },
     {
-      imageUrl:
-        "/img_tram.jpg",
+      imageUrl: "/img_tram.jpg",
       firstName: "Nguyễn",
       lastName: "Ngọc Trâm",
       positions: ["Gần 10 năm hoạt động trong lĩnh vực tài chính doanh nghiệp"],
       socialNetworks: [
         {
           name: "LinkedIn",
-          url: "https://www.linkedin.com/in/nguyễn-ng%E1%BB%8Dc-trâm-889156259?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app",
+          url: "https://www.linkedin.com/in/nguyễn-ng%E1%BB%8Dc-trâm-889156259",
         },
         {
           name: "Facebook",
@@ -81,8 +78,8 @@ export const TeamSection = () => {
         },
       ],
     },
-
   ];
+
   const socialIcon = (socialName: string) => {
     switch (socialName) {
       case "LinkedIn":
@@ -90,75 +87,89 @@ export const TeamSection = () => {
       case "Github":
         return <GithubIcon />;
       case "Facebook":
-        return <Facebook />;
+        return <Facebook className="size-5" />;
       case "Youtube":
-        return <YoutubeIcon />;
+        return <YoutubeIcon className="size-5" />;
     }
   };
 
   return (
-    <section id="team" className="container lg:w-[75%] py-24 sm:py-32">
-      <div className="text-center mb-8">
-        <h2 className="text-lg text-primary text-center mb-2 tracking-wider">
-          Đội ngũ
-        </h2>
+    <section id="team" className="py-24 sm:py-32 relative overflow-hidden"
+      style={{ background: "linear-gradient(160deg, hsl(210 40% 97%) 0%, hsl(156 30% 96%) 100%)" }}
+    >
+      {/* Decorative blobs */}
+      <div
+        className="blob w-[300px] h-[300px] top-0 left-0 opacity-12"
+        style={{ background: "#1E88E5" }}
+      />
+      <div
+        className="blob w-[250px] h-[250px] bottom-0 right-0 opacity-10"
+        style={{ background: "#12C37D" }}
+      />
 
-        <h2 className="text-3xl md:text-4xl text-center font-bold">
-          Đội ngũ sáng lập và phát triển
-        </h2>
-      </div>
+      <div className="container lg:w-[85%] relative z-10">
+        <div className="text-center mb-14 space-y-4">
+          <span className="section-label">Đội ngũ</span>
+          <h2 className="text-4xl md:text-5xl font-bold">
+            Những <span className="shimmer-text">người sáng lập</span>
+          </h2>
+          <div className="petal-divider" />
+          <p className="text-muted-foreground text-lg max-w-xl mx-auto">
+            Đội ngũ tâm huyết đứng sau mỗi liệu trình, mỗi sản phẩm của Oni Biocare.
+          </p>
+        </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-        {teamList.map(
-          (
-            { imageUrl, firstName, lastName, positions, socialNetworks },
-            index
-          ) => (
-            <Card
-              key={index}
-              className="bg-muted/60 dark:bg-card flex flex-col h-full overflow-hidden group/hoverimg"
-            >
-              <CardHeader className="p-0 gap-0">
-                <div className="h-full overflow-hidden">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+          {teamList.map(({ imageUrl, firstName, lastName, positions, socialNetworks }, index) => (
+            <div key={index} className="group">
+              <Card className="glass-card rounded-3xl h-full overflow-hidden border-0 flex flex-col cursor-default transition-all duration-300">
+                {/* Photo */}
+                <div className="relative overflow-hidden h-64">
                   <OniImage
                     src={imageUrl}
-                    alt=""
-                    width={300}
-                    height={300}
-                    className="w-full aspect-square object-cover saturate-0 transition-all duration-200 ease-linear size-full group-hover/hoverimg:saturate-100 group-hover/hoverimg:scale-[1.01]"
+                    alt={`${firstName} ${lastName}`}
+                    width={400}
+                    height={400}
+                    className="w-full h-full object-cover transition-all duration-500 group-hover:scale-105 group-hover:saturate-100 saturate-0"
                   />
+                  {/* gradient overlay */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent" />
                 </div>
-                <CardTitle className="py-6 pb-4 px-6">
-                  {firstName}
-                  <span className=" text-transparent px-2 bg-gradient-to-r from-[#66BB6A] to-primary bg-clip-text">{lastName}</span>
-                </CardTitle>
-              </CardHeader>
-              {positions.map((position, index) => (
-                <CardContent
-                  key={index}
-                  className={`pb-0 text-muted-foreground ${index === positions.length - 1 && "pb-6"
-                    }`}
-                >
-                  {position}
-                  {index < positions.length - 1 && <span>,</span>}
-                </CardContent>
-              ))}
 
-              <CardFooter className="space-x-4 mt-auto">
-                {socialNetworks.map(({ name, url }, index) => (
-                  <Link
-                    key={index}
-                    href={url}
-                    target="_blank"
-                    className="hover:opacity-80 transition-all"
+                <CardHeader className="pt-5 pb-1 px-6">
+                  <CardTitle className="text-xl">
+                    {firstName}{" "}
+                    <span className="shimmer-text">{lastName}</span>
+                  </CardTitle>
+                </CardHeader>
+
+                {positions.map((position, i) => (
+                  <CardContent
+                    key={i}
+                    className="px-6 py-0 text-sm text-muted-foreground leading-relaxed"
                   >
-                    {socialIcon(name)}
-                  </Link>
+                    {position}
+                  </CardContent>
                 ))}
-              </CardFooter>
-            </Card>
-          )
-        )}
+
+                <CardFooter className="px-6 pt-5 pb-6 mt-auto flex items-center gap-3">
+                  {socialNetworks.map(({ name, url }, i) => (
+                    <Link
+                      key={i}
+                      href={url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-muted-foreground hover:text-primary transition-colors duration-200 cursor-pointer"
+                      aria-label={name}
+                    >
+                      {socialIcon(name)}
+                    </Link>
+                  ))}
+                </CardFooter>
+              </Card>
+            </div>
+          ))}
+        </div>
       </div>
     </section>
   );

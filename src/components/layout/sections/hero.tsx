@@ -1,73 +1,161 @@
 "use client";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import ModalVideo from "@/components/ui/modal-video";
-import { ArrowRight } from "lucide-react";
-import { useTheme } from "next-themes";
+import { ArrowRight, Sparkles, Star } from "lucide-react";
 import Link from "next/link";
 import { useScrollAnimation } from "@/lib/useScrollAnimation";
 
+const stats = [
+  { value: "500+", label: "Khách hàng hài lòng" },
+  { value: "6+", label: "Năm kinh nghiệm" },
+  { value: "98%", label: "Phản hồi tích cực" },
+];
+
 export const HeroSection = () => {
-  const { theme } = useTheme();
   useScrollAnimation();
 
   return (
-    <section className="container w-full">
-      <div className="grid place-items-center lg:max-w-screen-xl gap-8 mx-auto py-20 md:py-32">
-        <div className="text-center space-y-8 animate-on-scroll">
-          <Badge variant="outline" className="text-sm py-2">
-            <span className="mr-2 text-primary">
-              <Badge>Nhiều hơn</Badge>
-            </span>
-            <span> cả một dịch vụ! </span>
-          </Badge>
+    <section className="relative min-h-screen flex items-center overflow-hidden">
+      {/* Ambient background blobs */}
+      <div
+        className="blob w-[480px] h-[480px] top-[-80px] right-[-120px] opacity-25"
+        style={{ background: "#1E88E5" }}
+      />
+      <div
+        className="blob w-[400px] h-[400px] bottom-[-60px] left-[-80px] opacity-15"
+        style={{ background: "#12C37D" }}
+      />
+      <div
+        className="blob w-[280px] h-[280px] top-1/3 left-1/3 opacity-10"
+        style={{ background: "#FCBE11" }}
+      />
 
-          <div className="max-w-screen-md mx-auto text-center text-4xl md:text-6xl font-bold">
-            <h1>
-              Hãy để
-              <span className="text-transparent px-2 bg-gradient-to-r from-[#66BB6A] to-primary bg-clip-text">
-                Oni Biocare
-              </span><br />
-              chăm sóc bạn
-            </h1>
+      {/* Decorative petal pattern */}
+      <div className="absolute top-24 left-8 text-primary/10 pointer-events-none select-none hidden lg:block">
+        <svg width="120" height="120" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="60" cy="60" r="58" stroke="currentColor" strokeWidth="1" strokeDasharray="4 6" />
+          <circle cx="60" cy="60" r="38" stroke="currentColor" strokeWidth="1" strokeDasharray="2 4" />
+        </svg>
+      </div>
+
+      <div className="container relative z-10">
+        <div className="grid lg:grid-cols-2 gap-12 items-center py-28 md:py-36">
+          {/* Left content */}
+          <div className="space-y-8 animate-on-scroll">
+            {/* Overline badge */}
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/10 border border-primary/20">
+              <Sparkles className="size-3.5 text-primary" />
+              <span className="text-xs font-semibold tracking-widest uppercase text-primary">
+                Dịch Vụ Cao Cấp Tại Nhà
+              </span>
+            </div>
+
+            {/* Headline */}
+            <div className="space-y-2">
+              <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold leading-[1.08] tracking-tight">
+                Hãy để{" "}
+                <span className="shimmer-text">Oni Biocare</span>
+              </h1>
+              <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold leading-[1.08] tracking-tight text-foreground">
+                chăm sóc bạn
+              </h1>
+            </div>
+
+            {/* Subtext */}
+            <p className="text-lg md:text-xl text-muted-foreground max-w-md leading-relaxed">
+              Chúng tôi mang đến những liệu trình thư giãn, phục hồi và làm đẹp
+              đẳng cấp — tại không gian riêng tư của bạn. Tiết kiệm thời gian,
+              tận hưởng trọn vẹn.
+            </p>
+
+            {/* CTA buttons */}
+            <div className="flex flex-col sm:flex-row gap-4">
+              <Link href="/#contact">
+                <button className="btn-premium flex items-center gap-2 w-full sm:w-auto justify-center">
+                  Đặt lịch ngay
+                  <ArrowRight className="size-4" />
+                </button>
+              </Link>
+              <Link href="/products">
+                <Button
+                  variant="outline"
+                  className="rounded-full border-primary/30 text-primary hover:bg-primary/5 hover:border-primary/50 transition-all w-full sm:w-auto px-6"
+                >
+                  Khám phá dịch vụ
+                </Button>
+              </Link>
+            </div>
+
+            {/* Social proof mini stats */}
+            <div className="flex items-center gap-6 pt-2">
+              <div className="flex -space-x-2">
+                {["T", "N", "H", "V"].map((letter, i) => (
+                  <div
+                    key={i}
+                    className="size-8 rounded-full bg-gradient-to-br from-[#1E88E5] to-[#12C37D] flex items-center justify-center text-white text-xs font-bold border-2 border-white"
+                  >
+                    {letter}
+                  </div>
+                ))}
+              </div>
+              <div className="flex items-center gap-1 text-sm text-muted-foreground">
+                <div className="flex">
+                  {[1,2,3,4,5].map(s => (
+                    <Star key={s} className="size-3.5 star-gold" />
+                  ))}
+                </div>
+                <span className="font-medium text-foreground ml-1">5.0</span>
+                <span className="text-muted-foreground">• 500+ đánh giá</span>
+              </div>
+            </div>
           </div>
 
-          <p className="max-w-screen-sm mx-auto text-xl text-muted-foreground">
-            {`Chúng tôi tự tin giúp khách hàng của mình tiết kiệm thời gian, giảm căng thẳng, mệt mỏi với những dịch vụ dành riêng cho bạn!`}
-          </p>
+          {/* Right — visual panel */}
+          <div
+            className="relative animate-on-scroll"
+            style={{ transitionDelay: "200ms" }}
+          >
+            {/* Hero image card */}
+            <div className="relative rounded-3xl overflow-hidden shadow-2xl shadow-primary/20">
+              <img
+                src="/images/banner/web_banner.png"
+                alt="Oni Biocare — Dịch vụ trị liệu cao cấp tại nhà"
+                className="w-full h-[460px] object-cover"
+                onError={(e) => {
+                  // fallback gradient
+                  (e.target as HTMLImageElement).style.display = "none";
+                }}
+              />
+              {/* overlay gradient */}
+              <div className="absolute inset-0 bg-gradient-to-t from-[#1E88E5]/20 via-transparent to-transparent" />
+            </div>
 
-          <div className="space-y-4 md:space-y-0 md:space-x-4">
-            <Button className="w-5/6 md:w-1/4 font-bold group/arrow" asChild>
-              <Link href="/#contact">
-                Đặt lịch ngay
-                <ArrowRight className="size-5 ml-2 group-hover/arrow:translate-x-1 transition-transform" />
-              </Link>
-            </Button>
+            {/* Floating stat cards */}
+            <div className="absolute -left-8 top-1/4 glass-card rounded-2xl px-4 py-3 shadow-lg animate-float hidden md:block">
+              <div className="text-2xl font-bold text-primary">500+</div>
+              <div className="text-xs text-muted-foreground font-medium">Khách hàng tin yêu</div>
+            </div>
 
-            <Button
-              asChild
-              variant="secondary"
-              className="w-5/6 md:w-1/4 font-bold"
+            <div
+              className="absolute -right-6 bottom-1/4 glass-card rounded-2xl px-4 py-3 shadow-lg animate-float hidden md:block"
+              style={{ animationDelay: "1.5s" }}
             >
-              <Link href="/products">
-                Xem sản phẩm
-              </Link>
-            </Button>
+              <div className="flex items-center gap-1 mb-0.5">
+                {[1,2,3,4,5].map(s => <Star key={s} className="size-3 star-gold" />)}
+              </div>
+              <div className="text-sm font-bold text-foreground">Đánh giá 5 sao</div>
+              <div className="text-xs text-muted-foreground">Từ 98% khách hàng</div>
+            </div>
           </div>
         </div>
 
-        <div className="relative group mt-14 animate-on-scroll" style={{ transitionDelay: "200ms" }}>
-          <div className="absolute top-2 lg:-top-8 left-1/2 transform -translate-x-1/2 w-[90%] mx-auto h-24 lg:h-80 bg-primary/60 rounded-full blur-3xl"></div>
-          <ModalVideo
-            thumb="/images/banner/web_banner.png"
-            thumbWidth={1104}
-            thumbHeight={576}
-            thumbAlt="Modal video thumbnail"
-            video="videos//video.mp4"
-            videoWidth={1920}
-            videoHeight={1080}
-          />
-          <div className="absolute bottom-0 left-0 w-full h-20 md:h-28 bg-gradient-to-b from-background/0 via-background/50 to-background rounded-lg"></div>
+        {/* Bottom stats bar */}
+        <div className="grid grid-cols-3 gap-4 pb-20 animate-on-scroll" style={{ transitionDelay: "400ms" }}>
+          {stats.map(({ value, label }) => (
+            <div key={label} className="text-center">
+              <div className="text-3xl md:text-4xl font-bold shimmer-text">{value}</div>
+              <div className="text-sm text-muted-foreground mt-1">{label}</div>
+            </div>
+          ))}
         </div>
       </div>
     </section>

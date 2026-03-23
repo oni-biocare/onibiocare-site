@@ -1,12 +1,6 @@
 "use client";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import {
   Carousel,
   CarouselContent,
@@ -14,7 +8,7 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
-import { Star } from "lucide-react";
+import { Star, Quote } from "lucide-react";
 import { useScrollAnimation } from "@/lib/useScrollAnimation";
 
 interface ReviewProps {
@@ -27,7 +21,7 @@ interface ReviewProps {
 
 const reviewList: ReviewProps[] = [
   {
-    image: "https://github.com/shadcn.png",
+    image: "",
     name: "Nguyễn Văn Khải",
     userName: "Quản lý sản phẩm",
     comment:
@@ -35,7 +29,7 @@ const reviewList: ReviewProps[] = [
     rating: 5.0,
   },
   {
-    image: "https://github.com/shadcn.png",
+    image: "",
     name: "Trần Thị Bích",
     userName: "Chuyên viên phân tích",
     comment:
@@ -43,7 +37,7 @@ const reviewList: ReviewProps[] = [
     rating: 4.8,
   },
   {
-    image: "https://github.com/shadcn.png",
+    image: "",
     name: "Lê Văn Cường",
     userName: "Giám đốc công nghệ",
     comment:
@@ -51,7 +45,7 @@ const reviewList: ReviewProps[] = [
     rating: 4.9,
   },
   {
-    image: "https://github.com/shadcn.png",
+    image: "",
     name: "Phạm Thành Đạt",
     userName: "Nhà khoa học dữ liệu",
     comment:
@@ -59,7 +53,7 @@ const reviewList: ReviewProps[] = [
     rating: 5.0,
   },
   {
-    image: "https://github.com/shadcn.png",
+    image: "",
     name: "Hoàng Thị Hồng",
     userName: "Quản lý dự án",
     comment:
@@ -67,7 +61,7 @@ const reviewList: ReviewProps[] = [
     rating: 5.0,
   },
   {
-    image: "https://github.com/shadcn.png",
+    image: "",
     name: "Vũ Minh Hoàng",
     userName: "Kỹ sư phần mềm",
     comment:
@@ -76,64 +70,81 @@ const reviewList: ReviewProps[] = [
   },
 ];
 
+const avatarColors = [
+  "from-pink-400 to-rose-500",
+  "from-purple-400 to-violet-500",
+  "from-fuchsia-400 to-pink-500",
+  "from-rose-400 to-pink-600",
+  "from-violet-400 to-purple-500",
+  "from-pink-500 to-fuchsia-500",
+];
+
 export const TestimonialSection = () => {
   useScrollAnimation();
 
   return (
     <section id="testimonials" className="container py-24 sm:py-32">
-      <div className="text-center mb-8 animate-on-scroll">
-        <h2 className="text-lg text-primary text-center mb-2 tracking-wider">
-          Đánh giá
+      {/* Header */}
+      <div className="text-center mb-14 space-y-4 animate-on-scroll">
+        <span className="section-label">Đánh giá từ khách hàng</span>
+        <h2 className="text-4xl md:text-5xl font-bold">
+          Khách hàng nói gì về{" "}
+          <span className="shimmer-text">chúng tôi?</span>
         </h2>
-
-        <h2 className="text-3xl md:text-4xl text-center font-bold mb-4">
-          Khách hàng nói gì về chúng tôi?
-        </h2>
+        <div className="petal-divider" />
       </div>
 
       <div className="animate-on-scroll" style={{ transitionDelay: "150ms" }}>
         <Carousel
-          opts={{
-            align: "start",
-          }}
-          className="relative w-[80%] sm:w-[90%] lg:max-w-screen-xl mx-auto"
+          opts={{ align: "start" }}
+          className="relative w-[88%] sm:w-[92%] lg:max-w-screen-xl mx-auto"
         >
-          <CarouselContent>
-            {reviewList.map((review) => (
+          <CarouselContent className="-ml-4">
+            {reviewList.map((review, index) => (
               <CarouselItem
                 key={review.name}
-                className="md:basis-1/2 lg:basis-1/3"
+                className="pl-4 md:basis-1/2 lg:basis-1/3"
               >
-                <Card className="glass-card rounded-xl h-full">
-                  <CardContent className="pt-6 pb-0">
-                    <div className="flex gap-1 pb-6">
-                      <Star className="size-4 fill-subheading text-subheading" />
-                      <Star className="size-4 fill-subheading text-subheading" />
-                      <Star className="size-4 fill-subheading text-subheading" />
-                      <Star className="size-4 fill-subheading text-subheading" />
-                      <Star className="size-4 fill-subheading text-subheading" />
-                    </div>
-                    {`"${review.comment}"`}
+                <Card className="glass-card rounded-2xl h-full border-0 flex flex-col p-6 cursor-default">
+                  {/* quote icon */}
+                  <div className="mb-4">
+                    <Quote className="size-8 text-primary/20 fill-primary/10" />
+                  </div>
+
+                  {/* Stars */}
+                  <div className="flex gap-0.5 mb-4">
+                    {[1,2,3,4,5].map((s) => (
+                      <Star key={s} className="size-4 star-gold" />
+                    ))}
+                  </div>
+
+                  {/* Comment */}
+                  <CardContent className="p-0 flex-1 text-sm text-muted-foreground leading-relaxed mb-6">
+                    &ldquo;{review.comment}&rdquo;
                   </CardContent>
 
-                  <CardHeader>
-                    <div className="flex flex-row items-center gap-4">
-                      <Avatar>
-                        <AvatarFallback>{review.name.charAt(0)}</AvatarFallback>
-                      </Avatar>
-
-                      <div className="flex flex-col">
-                        <CardTitle className="text-lg">{review.name}</CardTitle>
-                        <CardDescription>{review.userName}</CardDescription>
+                  {/* Author */}
+                  <div className="flex items-center gap-3">
+                    <Avatar className="size-10">
+                      <div
+                        className={`size-full rounded-full bg-gradient-to-br ${avatarColors[index % avatarColors.length]} flex items-center justify-center text-white text-sm font-bold`}
+                      >
+                        {review.name.split(" ").pop()?.charAt(0)}
                       </div>
+                    </Avatar>
+                    <div>
+                      <CardTitle className="text-sm font-semibold leading-tight">
+                        {review.name}
+                      </CardTitle>
+                      <CardDescription className="text-xs">{review.userName}</CardDescription>
                     </div>
-                  </CardHeader>
+                  </div>
                 </Card>
               </CarouselItem>
             ))}
           </CarouselContent>
-          <CarouselPrevious />
-          <CarouselNext />
+          <CarouselPrevious className="border-primary/20 text-primary hover:bg-primary/10" />
+          <CarouselNext className="border-primary/20 text-primary hover:bg-primary/10" />
         </Carousel>
       </div>
     </section>

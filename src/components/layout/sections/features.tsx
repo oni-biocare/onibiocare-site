@@ -16,7 +16,8 @@ const featureList: FeaturesProps[] = [
     title: "Tận tâm",
     description:
       "Chuyên viên được đào tạo bài bản, tận tâm và chuyên nghiệp, luôn lắng nghe và đồng hành cùng bạn trong suốt quá trình trị liệu.",
-  }, {
+  },
+  {
     icon: "HandHeart",
     title: "An toàn",
     description:
@@ -52,41 +53,53 @@ export const FeaturesSection = () => {
   useScrollAnimation();
 
   return (
-    <section id="features" className="container py-24 sm:py-32 relative overflow-hidden section-glow-left">
-      <h2 className="text-lg text-primary text-center mb-2 tracking-wider animate-on-scroll">
-        Giá trị
-      </h2>
+    <section
+      id="features"
+      className="container py-24 sm:py-32 relative overflow-hidden section-glow-left"
+    >
+      {/* Section header */}
+      <div className="text-center mb-14 space-y-4">
+        <span className="section-label animate-on-scroll">Giá trị cốt lõi</span>
+        <h2
+          className="text-4xl md:text-5xl font-bold animate-on-scroll"
+          style={{ transitionDelay: "80ms" }}
+        >
+          Điều gì khiến{" "}
+          <span className="shimmer-text">chúng tôi</span> khác biệt?
+        </h2>
+        <div className="petal-divider" />
+        <p
+          className="text-lg text-muted-foreground max-w-xl mx-auto animate-on-scroll"
+          style={{ transitionDelay: "160ms" }}
+        >
+          Chúng tôi mang đến dịch vụ trị liệu tại nhà, giúp bạn tận hưởng sự
+          an toàn, tiện lợi và thư giãn tối đa.
+        </p>
+      </div>
 
-      <h2 className="text-3xl md:text-4xl text-center font-bold mb-4 animate-on-scroll" style={{ transitionDelay: "80ms" }}>
-        Điều gì khiến chúng tôi khác biệt?
-      </h2>
-
-      <h3 className="md:w-1/2 mx-auto text-xl text-center text-muted-foreground mb-8 animate-on-scroll" style={{ transitionDelay: "160ms" }}>
-        Chúng tôi mang đến dịch vụ trị liệu tại nhà, giúp bạn tận hưởng sự an toàn, tiện lợi và thư giãn tối đa.
-      </h3>
-
-      <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 relative z-10">
+      <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 relative z-10">
         {featureList.map(({ icon, title, description }, index) => (
           <div
             key={title}
             className="animate-on-scroll"
             style={{ transitionDelay: `${200 + index * 80}ms` }}
           >
-            <Card className="h-full glass-card rounded-xl">
-              <CardHeader className="flex justify-center items-center">
-                <div className="bg-primary/20 p-2 rounded-full ring-8 ring-primary/10 mb-4">
-                  <Icon
-                    name={icon as keyof typeof icons}
-                    size={24}
-                    color="hsl(var(--primary))"
-                    className="text-primary"
-                  />
+            <Card className="h-full glass-card rounded-2xl border-0 cursor-pointer group">
+              <CardHeader className="flex flex-col items-center pt-8 pb-3">
+                <div className="relative mb-4">
+                  <div className="absolute inset-0 rounded-full bg-primary/20 animate-ping opacity-40 group-hover:opacity-0 transition-opacity" />
+                  <div className="relative bg-gradient-to-br from-primary/20 to-accent/20 p-3.5 rounded-full ring-4 ring-primary/10 group-hover:ring-primary/30 transition-all">
+                    <Icon
+                      name={icon as keyof typeof icons}
+                      size={26}
+                      color="hsl(var(--primary))"
+                      className="text-primary"
+                    />
+                  </div>
                 </div>
-
-                <CardTitle>{title}</CardTitle>
+                <CardTitle className="text-lg text-center">{title}</CardTitle>
               </CardHeader>
-
-              <CardContent className="text-muted-foreground text-center">
+              <CardContent className="text-muted-foreground text-center text-sm leading-relaxed pb-8">
                 {description}
               </CardContent>
             </Card>

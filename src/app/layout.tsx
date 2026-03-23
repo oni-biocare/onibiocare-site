@@ -75,8 +75,7 @@ export default function RootLayout({
       <body className={cn("min-h-screen bg-background", plusJakartaSans.variable, playfairDisplay.variable)}>
         <ThemeProvider
           attribute="class"
-          defaultTheme="dark"
-          enableSystem
+          defaultTheme="light"
           disableTransitionOnChange
         >
           <Navbar />

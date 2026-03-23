@@ -18,6 +18,9 @@ gallery:
   -  "/images/products/nigaribi_6.png"
 shopeeUrl: "https://shopee.vn/Nước-cân-bằng-chuyển-hoá-bổ-sung-82-khoáng-chất-vitamin-từ-nước-biển-sâu-giúp-giảm-táo-bón-Nigaribi-100ml-THIETBISPAONI-i.1496144810.24143186699?is_from_login=true"
 order: 4
+doseHormones:
+  - dopamine
+  - serotonin
 ---
 
 # 🔥 NGỪNG CHỊU ĐỰNG CƠN ĐAU BỤNG! 

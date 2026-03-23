@@ -18,6 +18,9 @@ gallery:
   -  "/images/products/magne_10ml_scroll_6.png"
 shopeeUrl: "https://shopee.vn/Dầu-Xoa-Bóp-Dầu-Massage-Hỗ-Trợ-Các-Vấn-Đề-Xương-Giảm-Đau-Dầu-Magne-Dạng-Lăn-10ml-Cực-Hiệu-Quả-THIETBISPAONI-i.1496144810.26831721142"
 order: 2
+doseHormones:
+  - endorphins
+  - serotonin
 ---
 
 # 🔥 THOÁT KHỎI ĐAU MỎI VAI GÁY CHỈ TRONG 3 PHÚT!

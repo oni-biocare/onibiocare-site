@@ -45,6 +45,7 @@ interface RequestBody {
     scores: Record<string, ScoreEntry>;
     insights: InsightsEntry;
     activeSections: string[];
+    suggestedProductNames?: string[];
 }
 
 function esc(s: string): string {
@@ -55,7 +56,7 @@ function esc(s: string): string {
 }
 
 function buildTelegramMessage(body: RequestBody): string {
-    const { name, phone, mode, answers, scores, insights, activeSections } = body;
+    const { name, phone, mode, answers, scores, insights, activeSections, suggestedProductNames } = body;
 
     const modeLabel: Record<string, string> = {
         all: "Toàn bộ D.O.S.E",
@@ -117,6 +118,15 @@ function buildTelegramMessage(body: RequestBody): string {
         lines.push(`⬆️ Ưu tiên phát triển: <b>${esc(insights.priority)}</b>`);
     }
     lines.push(`💬 ${esc(insights.balance)}`);
+
+    // ── Product Suggestions ────────────────────────────────────
+    if (suggestedProductNames && suggestedProductNames.length > 0) {
+        lines.push("");
+        lines.push("🛍️ <b>Sản phẩm được gợi ý:</b>");
+        suggestedProductNames.forEach((name, i) => {
+            lines.push(`  ${i + 1}. ${esc(name)}`);
+        });
+    }
 
     return lines.join("\n");
 }

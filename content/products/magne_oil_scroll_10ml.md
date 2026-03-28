@@ -1,7 +1,7 @@
 ---
 title: "Magne Oil 10ml dạng lăn"
 description: "Dầu Xoa Bóp Xương Khớp Giảm Đau Khớp Đầu Gối Vai Cổ Eo Chân 100% Magne 100ml Dạng "
-price: "35,000đ"
+price: "55,000đ"
 category: "Thực phẩm chức năng"
 features:
   - "Hỗ trợ giảm đau nhức xương khớp, mỏi cổ vai gáy"

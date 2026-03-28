@@ -1,6 +1,7 @@
 "use client";
-import { Menu, X } from "lucide-react";
+import { Menu, ShoppingCart, X } from "lucide-react";
 import React from "react";
+import { useCartCount } from "@/lib/cartStore";
 import {
   Sheet,
   SheetContent,
@@ -33,7 +34,7 @@ interface FeatureProps {
 }
 
 const routeList: RouteProps[] = [
-  { href: "/#team", label: "Đội ngũ" },
+  // { href: "/#team", label: "Đội ngũ" },
   { href: "/#contact", label: "Liên hệ" },
   { href: "/blog", label: "Bài viết" },
   { href: "/products", label: "Sản phẩm & Dịch vụ" },
@@ -64,6 +65,7 @@ const featureList: FeatureProps[] = [
 
 export const Navbar = () => {
   const [isOpen, setIsOpen] = React.useState(false);
+  const cartCount = useCartCount();
 
   return (
     <header className="w-[90%] md:w-[75%] lg:w-[80%] lg:max-w-screen-xl top-5 mx-auto sticky z-40 rounded-2xl flex justify-between items-center p-2 pl-4 bg-white/85 backdrop-blur-md border border-primary/15 shadow-lg shadow-primary/5">
@@ -81,7 +83,16 @@ export const Navbar = () => {
       </Link>
 
       {/* Mobile menu */}
-      <div className="flex items-center lg:hidden">
+      <div className="flex items-center gap-1 lg:hidden">
+        {/* Mobile cart icon */}
+        <Link href="/cart" aria-label="Giỏ hàng" className="relative p-2 hover:bg-primary/10 rounded-lg transition-colors">
+          <ShoppingCart className="size-5 text-foreground" />
+          {cartCount > 0 && (
+            <span className="absolute -top-0.5 -right-0.5 min-w-[18px] h-[18px] rounded-full bg-primary text-primary-foreground text-[10px] font-bold flex items-center justify-center px-1">
+              {cartCount}
+            </span>
+          )}
+        </Link>
         <Sheet open={isOpen} onOpenChange={setIsOpen}>
           <SheetTrigger asChild>
             <Button
@@ -191,6 +202,15 @@ export const Navbar = () => {
 
       {/* Desktop CTA */}
       <div className="hidden lg:flex items-center gap-3">
+        {/* Desktop cart icon */}
+        <Link href="/cart" aria-label="Giỏ hàng" className="relative p-2 hover:bg-primary/10 rounded-lg transition-colors cursor-pointer">
+          <ShoppingCart className="size-5 text-foreground" />
+          {cartCount > 0 && (
+            <span className="absolute -top-0.5 -right-0.5 min-w-[18px] h-[18px] rounded-full bg-primary text-primary-foreground text-[10px] font-bold flex items-center justify-center px-1">
+              {cartCount}
+            </span>
+          )}
+        </Link>
         <Link href="/#contact" className="cursor-pointer">
           <button className="btn-premium text-sm px-5 py-2.5">
             Đặt lịch

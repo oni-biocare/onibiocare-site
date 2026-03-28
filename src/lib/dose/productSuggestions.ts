@@ -5,7 +5,7 @@
  *
  * Hormone → product ID mapping:
  *   dopamine    → Nigaribi (energy/vitality boost)
- *   oxytocin    → Sữa Anpha (bonding, emotional health)
+ *   oxytocin    → Nigaribi, Magne Oil (bonding, emotional health)
  *   serotonin   → All products (serotonin affects mood/sleep broadly)
  *   endorphins  → Magne Oil products (pain relief, muscle recovery)
  */
@@ -15,9 +15,9 @@ import type { Product } from "@/lib/products";
 
 /** Priority order: which products to show FIRST for a given hormone */
 export const DOSE_PRODUCT_PRIORITY: Record<DoseSectionKey, string[]> = {
-  dopamine: ["nigaribi", "magne_oil_10ml", "anpha-milk"],
-  oxytocin: ["anpha-milk", "nigaribi", "magne_oil"],
-  serotonin: ["anpha-milk", "nigaribi", "magne_oil"],
+  dopamine: ["nigaribi", "magne_oil_10ml"],
+  oxytocin: ["nigaribi", "magne_oil"],
+  serotonin: ["nigaribi", "magne_oil"],
   endorphins: ["magne_oil", "magne_oil_scroll_10ml", "magne_oil_10ml"],
 };
 

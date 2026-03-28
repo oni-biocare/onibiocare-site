@@ -93,7 +93,7 @@ export const FooterSection = () => {
               {[
                 { label: "Sản phẩm & Dịch vụ", href: "/products" },
                 { label: "Bài viết", href: "/blog" },
-                { label: "Đội ngũ", href: "/#team" },
+                // { label: "Đội ngũ", href: "/#team" },
               ].map(({ label, href }) => (
                 <li key={label}>
                   <Link
